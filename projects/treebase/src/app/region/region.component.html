@@ -1,0 +1,22 @@
+<div class='content' *ngIf='record'>
+    <h1>{{ name }}</h1>
+    <div class='icon-infos'>
+        <div class='icon-info' *ngFor='let iconInfo of iconInfos'>
+            <div class='icon' [style.backgroundImage]='"url(assets/img/icon-" + iconInfo.icon + ".svg)"'></div>
+            <div class='text'>
+                <h2>{{iconInfo.text}}</h2>
+                <div class='value'>
+                    <span class='number'>{{iconInfo.value}}</span>
+                    <span class='units'>{{iconInfo.units}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class='sources'>
+        <h2>רשימת מקורות המידע</h2>
+        <div class='info' *ngFor='let source of sources'>
+            <span>{{source.name}}</span>
+            <span><strong>{{source.count.toLocaleString()}}</strong> עצים</span>
+        </div>
+    </div>
+</div>

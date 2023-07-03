@@ -1,0 +1,162 @@
+.font-regular {
+    font-style: Normal;
+    font-weight: 400;
+}
+
+.font-semibold {
+    font-style: Normal;
+    font-weight: 600;
+}
+
+.font-bold {
+    font-style: Normal;
+    font-weight: 700;
+}
+
+.font-rubik-medium {
+    font-family: 'Rubik', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+}
+
+.font-rubik-semibold {
+    font-family: 'Rubik', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+}
+
+.font-secular-regular {
+    font-family: 'Secular One', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+}
+
+@color-white: #fff;
+@color-green: #204E37;
+@color-green-good: #64B883;
+@color-grey: #383838;
+@color-midgrey: #838383;
+
+  // Utils
+.background-image {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+.button-image {
+    border: none;
+    background: none;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+}
+
+.overflow-scroll {
+    /*FireFox*/
+    scrollbar-width: none;
+    /*IE10+*/
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+    &::-webkit-scrollbar {
+    /*Chrome, Safari, Edge*/
+        display: none;
+    }
+    overflow: scroll;
+}
+
+.ellipsis {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.ellipsis-2-line {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    white-space: normal;
+}
+
+
+@mobile-threshold: 768px;
+  
+.mobile(@rules) {
+    @media only screen and (max-width: (@mobile-threshold - 1px)) {
+        @rules();
+    }
+}
+
+.desktop(@rules) {
+    @media only screen and (min-width: @mobile-threshold) {
+        @rules();
+    }
+}
+  
+.mobile({
+    ::ng-deep .layout-desktop {
+        display: none !important;
+    }
+});
+
+.desktop({
+    ::ng-deep .layout-mobile {
+        display: none !important;
+    }
+});
+
+.loading {
+    box-sizing: border-box;
+    overflow: hidden;
+    position: relative;  
+    background: rgb(239, 241, 246) no-repeat;
+    display: inline-block;
+    will-change: transform;
+  
+    &:after,
+    &:before {
+        box-sizing: border-box;
+    }
+  
+    &:after,
+    &:before {
+        box-sizing: border-box;
+    }
+
+    transform: translate3d(0, 0, 0);
+  
+    &:before {
+        animation: progress 2s ease-in-out infinite;
+        background-size: 200px 100%;
+        position: absolute;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        width: 200px;
+        height: 100%;
+        content: '';
+    }
+  
+    &:before {
+        background-image: linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0),
+            rgba(255, 255, 255, 0.6),
+            rgba(255, 255, 255, 0)
+        );
+    }
+}  
+
+@keyframes progress {
+    0% {
+        transform: translate3d(-200px, 0, 0);
+    }
+    100% {
+        transform: translate3d(calc(200px + 100vw), 0, 0);
+    }
+}
+
+.ltr {
+    direction: ltr;
+}

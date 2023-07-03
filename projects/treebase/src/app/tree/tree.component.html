@@ -1,0 +1,34 @@
+<app-content [init]='!!tree' (state)='state = $event'>
+    <div class='content' *ngIf='tree'>
+        <h1>מזעץ: {{ tree['meta-tree-id'] }}</h1>
+        <div class='main-infos'>
+            <div class='info'>
+                <span>סוג</span>
+                <span>{{ tree['attributes-genus-clean-he'] || 'לא ידוע' }}</span>
+            </div>
+            <div class='info'>
+                <span>נ.צ</span>
+                <span class='ltr'>{{ tree['location-x'] | number:'1.0-5' }}, {{ tree['location-y'] | number:'1.0-5' }}</span>
+            </div>
+            <div class='info' *ngIf='tree.muni_name'>
+                <span>רשות מקומית</span>
+                <span>{{ tree['muni_name'] }}</span>
+            </div>
+            <div class='info' *ngIf='tree.road_name'>
+                <span>רחוב</span>
+                <span>{{ tree['road_name'] }}</span>
+            </div>
+            <div class='info' *ngIf='tree.cad_code'>
+                <span>גוש/חלקה</span>
+                <span class='ltr'>{{ tree['cad_code'] }}</span>
+            </div>
+        </div>
+        <div class='sources'>
+            <h2>רשימת מקורות המידע</h2>
+            <div class='info' *ngFor='let source of sources'>
+                <span>{{source.name}}</span>
+                <span>{{source.date}}</span>
+            </div>
+        </div>
+    </div>
+</app-content>

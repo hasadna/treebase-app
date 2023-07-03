@@ -1,0 +1,4 @@
+<div class='sidebar'>
+    <div class='close' *ngIf='!!back'><a [routerLink]='back'></a></div>
+    <ng-content *ngIf='init'></ng-content>
+</div>

@@ -1,0 +1,3 @@
+<app-content [init]='!!stat_area' [back]='["/", "stat-areas"]' (state)='state = $event'>
+    <app-region  *ngIf='stat_area' [record]='stat_area' [sources]='sources' [name]='name'></app-region>
+</app-content>

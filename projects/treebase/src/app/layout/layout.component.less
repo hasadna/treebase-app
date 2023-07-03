@@ -1,0 +1,33 @@
+:host {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+    width: 100%;
+    align-items: stretch;
+
+    app-header, app-filter {
+        flex: 0 0 auto;
+    }
+    .content {
+        flex: 1 1 auto;
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+
+        & > ::ng-deep {
+            * {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+                z-index: 1;
+                pointer-events: none;
+            }
+        }
+        & > app-map {
+            z-index: 0;
+            pointer-events: all;
+        }
+   }
+}

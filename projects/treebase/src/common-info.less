@@ -1,0 +1,50 @@
+@import url('./common.less');
+
+.content {
+    display: flex;
+    flex-flow: column;
+    gap: 30px;
+
+    h1 {
+        .font-regular;
+        margin: 0;
+        line-height: 24px;
+        font-size: 24px;
+        color: @color-green;
+    }
+
+    .sources {
+        display: flex;
+        flex-flow: column;
+        gap: 12px;
+        h2 {
+            color: @color-green;
+            .font-semibold;
+            font-size: 13px;
+            line-height: 12px;
+            margin: 0;
+        }
+        .info {
+            display: flex;
+            flex-flow: row;
+            align-items: baseline;
+            justify-content: space-between;
+            span:first-child {
+                .font-regular;
+                font-size: 13px;
+                line-height: 17px;
+                color: @color-midgrey;
+            }
+            span:last-child {
+                .font-semibold;
+                font-size: 13px;
+                line-height: 17px;
+                color: @color-grey;
+                strong {
+                    font-size: 16px;
+                    line-height: 24px;
+                }
+            }
+        }    
+    }
+}

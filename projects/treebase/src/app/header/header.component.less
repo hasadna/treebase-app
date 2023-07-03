@@ -1,0 +1,73 @@
+@import '../../common.less';
+
+:host {
+    height: 80px;
+    width: 100%;
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    padding: 0 25px;
+    background-color: @color-green;
+
+    a, a:visited, a:hover {
+        text-decoration: none;
+    }
+
+    .logo-container {
+        display: flex;
+        flex-flow: row;
+        align-items: center;
+        gap: 20px;
+        height: 60px;
+        
+        .logo {
+            width: 119px;
+            height: 50px;
+            .background-image;
+            background-image: url('../../assets/img/logo.svg');
+            padding-left: 20px;
+        }
+        .separator {
+            width: 1px;
+            height: 100%;
+            background-color: @color-white;
+        }
+        h1 {
+            margin: 0;
+            padding-right: 20px;
+            color: @color-white;
+            .font-rubik-semibold;
+            text-align: right;
+            font-size: 18px;
+            line-height: 20px;
+        }
+    }
+
+
+    .links {
+        margin-right: auto;
+        display: flex;
+        flex-flow: row;
+        align-items: center;
+        gap: 30px;
+
+        a {
+            color: @color-white;
+            .font-rubik-medium;
+            font-size: 18px;
+            line-height: 20px;
+            text-decoration: none;
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+
+    .pkw-logo {
+        margin-right: 50px;
+        .background-image;
+        width: 61px;
+        height: 59.863px;
+        background-image: url('../../assets/img/pkw-logo.svg');
+    }
+}

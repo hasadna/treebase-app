@@ -1,0 +1,61 @@
+@import url('../../common-info.less');
+
+.content {
+    .icon-infos {
+        display: flex;
+        flex-flow: row wrap;
+        gap: 40px;
+        align-items: center;
+        justify-content: flex-start;
+
+        .icon-info {
+            display: flex;
+            flex-flow: row;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 8px;
+            flex: 0 1 calc(50% ~'-' 20px);
+
+            .icon {
+                .background-image;
+                background-size: 40px;
+                background-position: center;
+                width: 40px;
+                height: 40px;
+            }
+
+            .text {
+                display: flex;
+                flex-flow: column;
+                gap: 8px;
+
+                h2 {
+                    .font-regular;
+                    margin: 0;
+                    font-size: 12px;
+                    line-height: 12px;
+                    color: @color-grey;
+                }
+
+                .value {
+                    display: flex;
+                    flex-flow: row;
+                    align-items: baseline;
+                    gap: 3px;
+    
+                    .number {
+                        .font-semibold;
+                        font-size: 20px;
+                        line-height: 12px;
+                        color: @color-grey;
+                    }
+                    .units {
+                        .font-semibold;
+                        font-size: 12px;
+                        color: @color-grey;                        
+                    }
+                }
+            }
+        }
+    }
+}

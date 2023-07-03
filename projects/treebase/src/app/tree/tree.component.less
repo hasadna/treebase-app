@@ -1,0 +1,28 @@
+@import url('../../common-info.less');
+
+.content {
+    .info {
+        display: flex;
+        flex-flow: row;
+        align-items: baseline;
+        justify-content: space-between;
+        span:first-child {
+            .font-regular;
+            font-size: 15px;
+            line-height: 24px;
+            color: @color-grey;
+        }
+        span:last-child {
+            .font-semibold;
+            font-size: 15px;
+            line-height: 24px;
+            color: @color-grey;
+        }
+    }
+
+    .main-infos {
+        display: flex;
+        flex-flow: column;
+        gap: 12px;
+    }
+}
