@@ -29,7 +29,7 @@ const ICON_INFOS: IconInfo[] = [
     text: 'כמות עצים',
     icon: 'tree-count',
     field: 'total_count',
-    units: 'עצים',
+    units: '',
   },
   {
     text: 'שטח חופות',

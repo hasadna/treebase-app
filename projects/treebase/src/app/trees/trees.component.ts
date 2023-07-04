@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { State } from '../state';
 
 @Component({
   selector: 'app-trees',
@@ -6,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./trees.component.less']
 })
 export class TreesComponent {
-
+  state: State | null = null;
 }

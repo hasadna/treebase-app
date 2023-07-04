@@ -1,4 +1,4 @@
-<app-content [init]='!!tree' (state)='state = $event'>
+<app-content [init]='!!tree' [back]='["/", "trees"]' (state)='state = $event'>
     <div class='content' *ngIf='tree'>
         <h1>מזעץ: {{ tree['meta-tree-id'] }}</h1>
         <div class='main-infos'>

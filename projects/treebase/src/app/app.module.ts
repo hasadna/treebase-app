@@ -17,6 +17,7 @@ import { MuniComponent } from './muni/muni.component';
 import { StatAreasComponent } from './stat-areas/stat-areas.component';
 import { StatAreaComponent } from './stat-area/stat-area.component';
 import { RegionComponent } from './region/region.component';
+import { SummaryComponent } from './summary/summary.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { RegionComponent } from './region/region.component';
     MuniComponent,
     StatAreasComponent,
     StatAreaComponent,
-    RegionComponent
+    RegionComponent,
+    SummaryComponent
   ],
   imports: [
     BrowserModule,

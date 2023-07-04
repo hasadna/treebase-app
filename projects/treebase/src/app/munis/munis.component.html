@@ -1,1 +1,3 @@
-<p>munis works!</p>
+<app-content [init]='!!state' (state)='state = $event'>
+    <app-summary *ngIf='state' [state]='state' name='רשויות מקומיות'></app-summary>
+</app-content>

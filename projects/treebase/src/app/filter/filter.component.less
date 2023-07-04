@@ -1,0 +1,74 @@
+@import url(../../common.less);
+
+@selector-width: 96px;
+
+:host {
+    width: 100%;
+    height: 80px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px;
+    background: @color-almost-white;
+    box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.30);
+    z-index: 2;
+
+    .selector {
+        height: 40px;
+        border-radius: 20px;
+        border: 1px solid @color-green;
+        background: @color-white;
+        display: flex;
+        flex-flow: row;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+
+        .selected {
+            position: absolute;
+            width: calc(@selector-width - 8px);
+            height: 32px;
+            right: 4px;
+            border-radius: 16px;
+            background: @color-green;
+            z-index: 0;
+            transition: right 0.2s ease-in-out;
+            right: calc(-2 * @selector-width);
+            &.munis {
+                right: 4px;
+            }
+            &.stat-areas {
+                right: calc(@selector-width + 4px);
+            }
+            &.trees {
+                right: calc(2*@selector-width + 4px);
+            }
+        }
+        
+        a {
+            display: flex;
+            flex-flow: row;
+            align-items: center;
+            justify-content: center;
+            width: @selector-width;
+            .font-regular;
+            font-size: 20px;
+            color: @color-grey;
+            z-index: 1;
+            text-decoration: none;
+
+            &:hover, &:focus {
+                text-decoration: underline;
+            }
+
+            &.active {
+                .font-semibold;
+                color: @color-white;
+                &, &:hover, &:focus {
+                    text-decoration: none;
+                }
+            }
+        }
+    }
+}

@@ -78,6 +78,24 @@ export class MapComponent implements AfterViewInit{
           }
         });
       });
+      this.OWN_LAYERS.forEach((layer) => {
+        this.map.on('mousemove', layer, (e: mapboxgl.MapLayerMouseEvent) => {
+          if (e.defaultPrevented) {
+            return;
+          }
+          e.preventDefault();
+          if (e.features && e.features.length > 0) {
+            this.map.getCanvas().style.cursor = 'pointer';
+          }
+        });
+      });
+      this.map.on('mousemove', (e: mapboxgl.MapLayerMouseEvent) => {
+        if (e.defaultPrevented) {
+          return;
+        }
+        e.preventDefault();
+        this.map.getCanvas().style.cursor = '';
+      });
       this.state.state.pipe(
         untilDestroyed(this),
       ).subscribe((state) => {
@@ -85,6 +103,7 @@ export class MapComponent implements AfterViewInit{
           this.map.flyTo({
             center: state.geo.center,
             zoom: state.geo.zoom,
+            padding: {top:0, bottom:0, left:0, right: 400}
           });
         }
         console.log('STATE', state, this.map.getStyle().layers);
@@ -94,6 +113,7 @@ export class MapComponent implements AfterViewInit{
               this.map.setLayoutProperty(layer.id, 'visibility', 'visible');
             } else {
               this.map.setLayoutProperty(layer.id, 'visibility', 'none');
+              return;
             }
             const lc = state.getLayerConfig(layer.id);
             console.log('OWN LAYER', layer.id, lc);

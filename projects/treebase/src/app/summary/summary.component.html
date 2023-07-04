@@ -1,0 +1,9 @@
+<div class='content' *ngIf='state'>
+    <h1>{{name}}</h1>
+    <div class='charts'>
+        <div class='chart' *ngFor='let chart of state.charts'>
+            <h2>{{chart.title}}</h2>
+            <div class='chart-container' #chart></div>
+        </div>
+    </div>
+</div>

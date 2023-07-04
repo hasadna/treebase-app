@@ -1,0 +1,8 @@
+<div class='filter'>
+    <div class='selector'>
+        <span [class]='"selected " + mode'></span>
+        <a class='munis' [routerLink]='["/", "munis"]' [class.active]='mode === "munis"'>רשויות</a>
+        <a class='stat-areas' [routerLink]='["/", "stat-areas"]' [class.active]='mode === "stat-areas"'>א״ס</a>
+        <a class='trees' [routerLink]='["/", "trees"]' [class.active]='mode === "trees"'>עצים</a>
+    </div>
+</div>

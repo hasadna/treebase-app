@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { State } from '../state';
 
 @Component({
   selector: 'app-munis',
@@ -6,5 +7,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./munis.component.less']
 })
 export class MunisComponent {
+
+  state: State | null = null;
 
 }
