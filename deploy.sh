@@ -3,7 +3,7 @@ git checkout main && \
 (git branch -D dist || true) && \
 git checkout -b dist && \
 rm .gitignore && \
-npm run prod && \
+npm run build && \
 cp dist/treebase/browser/index.html dist/treebase/browser/404.html && \
 cp CNAME dist/treebase/browser/ || true && \
 git add dist/treebase/browser && \
