@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { State } from '../state';
+import { State } from '../states/base-state';
 
 @Component({
   selector: 'app-muni',

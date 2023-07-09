@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Route, Router, RouterEvent } from '@angular/router';
-import { ReplaySubject, filter, map, mergeMap, switchMap, tap } from 'rxjs';
-import { State, StateMode } from './state';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { filter, map } from 'rxjs';
 import { StateService } from './state.service';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
@@ -17,10 +16,20 @@ export class AppComponent {
     this.router.events.pipe(
       untilDestroyed(this),
       filter((event) => event instanceof NavigationEnd),
-      map((event) => (event as NavigationEnd).url.split('?')[0].split('/').filter(x => x.length > 0)),
-    ).subscribe((segments: string[]) => {
-      console.log('url changed', segments);
-      this.state.initFromUrl(segments);
+      map((event) => {
+        const ne = event as NavigationEnd;
+        const segments = ne.url.split('?')[0].split('/').filter(x => x.length > 0);
+        const qs = ('?' + ne.url.split('?')[1]) || '';
+        const sp = new URLSearchParams(qs);
+        const params = Object.fromEntries(sp.entries());
+        return {
+          segments,
+          params,
+        };
+      })
+    ).subscribe(({segments, params}) => {
+      console.log('url changed', segments, params);
+      this.state.initFromUrl(segments, params);
     });
   }
 }

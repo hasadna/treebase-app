@@ -1,3 +1,16 @@
-<app-content [init]='!!state' (state)='state = $event'>
-    <app-summary *ngIf='state' [state]='state' name='מאגר עצים יע״ד'></app-summary>
+<app-content mode='trees' [init]='!!state' (state)='state = $event'>
+    <app-summary *ngIf='state' [state]='state'>
+        <div class='icon-infos'>
+            <div class='icon-info big'>
+                <div class='icon' [style.backgroundImage]='"url(assets/img/icon-tree-count.svg)"'></div>
+                <div class='text'>
+                    <h2>סה״כ עצים במאגר</h2>
+                    <div class='value'>
+                        <span class='number'>{{state.data[0][0].count.toLocaleString()}}</span>
+                        <span class='units'></span>
+                    </div>
+                </div>
+            </div>
+        </div>    
+    </app-summary>
 </app-content>

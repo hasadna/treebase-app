@@ -15,6 +15,8 @@ export class MapComponent implements AfterViewInit{
 
   STYLE = 'mapbox://styles/treebase/clck61858001514mfunfann6j/draft';
   OWN_LAYERS = [
+    'cadaster-label',
+    'cadaster-border',
     'stat-areas-label',
     'stat-areas-border',
     'stat-areas-fill',

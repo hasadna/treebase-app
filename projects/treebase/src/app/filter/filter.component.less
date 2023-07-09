@@ -2,7 +2,7 @@
 
 @selector-width: 96px;
 
-:host {
+.filter {
     width: 100%;
     height: 80px;
     padding: 20px;
@@ -34,15 +34,19 @@
             background: @color-green;
             z-index: 0;
             transition: right 0.2s ease-in-out;
-            right: calc(-2 * @selector-width);
+            transition-property: right, opacity;
+            opacity: 0;
             &.munis {
                 right: 4px;
+                opacity: 1;
             }
             &.stat-areas {
                 right: calc(@selector-width + 4px);
+                opacity: 1;
             }
             &.trees {
                 right: calc(2*@selector-width + 4px);
+                opacity: 1;
             }
         }
         
@@ -67,6 +71,77 @@
                 color: @color-white;
                 &, &:hover, &:focus {
                     text-decoration: none;
+                }
+            }
+        }
+    }
+
+    .controls {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 30px;    
+        .control {
+            .check {
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                gap: 5px;
+                input {
+                    appearance: none;
+                    position: relative;
+                    width: 18px;
+                    height: 18px;
+                    border: 2px solid @color-midgrey;
+                    border-radius: 2px;
+                    vertical-align: -2px;
+
+                    &::before {
+                        content: "✔";
+                        position: absolute;
+                        font-size: 13px;
+                        right: 1px;
+                        top: -2px;
+                        visibility: hidden;
+                        color: @color-green;
+                        .font-regular;
+                    }
+
+                    &:checked {
+                        border-color: @color-green;
+                        &::before {
+                            visibility: visible;
+                        }
+                    }
+                }
+                label {
+                    margin: 0;
+                    color: @color-grey;
+                    .font-regular;
+                    font-size: 16px;
+                    line-height: 24px;
+                }
+            }
+            .select {
+                display: flex;
+                flex-flow: column;
+                label {
+                    .font-semibold;
+                    font-size: 12px;
+                    line-height: 16px;
+                    margin: 0;
+                    color: @color-midgrey;
+                    margin-top: -16px;
+                }
+                select {
+                    border-radius: 5px;
+                    border: 1px solid @color-green;
+                    background: @color-white;
+                    padding: 4px 12px;
+                    color: @color-grey;
+                    .font-regular;
+                    font-size: 16px;
+                    line-height: 24px;
                 }
             }
         }

@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { StateService } from '../state.service';
-import { State } from '../state';
+import { State } from '../states/base-state';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+
+const MAPS_API_KEY = 'AIzaSyAW0_GwE7WPDox5RZnUMkESHGiSe5siWdQ';
 
 @Component({
   selector: 'app-tree',
@@ -11,8 +14,9 @@ export class TreeComponent {
 
   tree: any = null;
   sources: any[] = [];
+  streetView: SafeUrl;
 
-  constructor() {
+  constructor(private sanitizer: DomSanitizer) {
   }
 
   set state(state: State) {
@@ -33,5 +37,6 @@ export class TreeComponent {
       }
     }
     this.sources = this.sources.sort((a, b) => a.date.localeCompare(b.date));
+    this.streetView = this.sanitizer.bypassSecurityTrustResourceUrl(`https://www.google.com/maps/embed/v1/streetview?location=${this.tree["location-y"]},${this.tree["location-x"]}&key=${MAPS_API_KEY}`);
   }
 }

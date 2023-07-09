@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, OnChanges, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
-import { State } from '../state';
+import { State } from '../states/base-state';
 import { timer } from 'rxjs';
 
 @Component({

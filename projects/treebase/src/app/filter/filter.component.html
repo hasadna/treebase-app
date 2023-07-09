@@ -5,4 +5,20 @@
         <a class='stat-areas' [routerLink]='["/", "stat-areas"]' [class.active]='mode === "stat-areas"'>א״ס</a>
         <a class='trees' [routerLink]='["/", "trees"]' [class.active]='mode === "trees"'>עצים</a>
     </div>
+    <div class='controls'>
+        <div class='control' *ngFor='let control of controls'>
+            <div class='check' *ngIf='control.kind === "check"'>
+                <input type='checkbox' [id]='control.id' [checked]='isChecked(control.id)' (change)='updateCheck(control.id, $event.target)'>
+                <label [for]='control.id'>{{ control.label }}</label>
+            </div>
+            <div class='select' *ngIf='control.kind === "select"'>
+                <label [for]='control.id'>{{ control.label }}</label>
+                <select [id]='control.id' (change)='selectValue(control.id, $event)'>
+                    <option *ngFor='let option of control.options' [value]='option.value'
+                            [selected]='option.value===selectedValue(control)'
+                    >{{ option.label }}</option>
+                </select>
+            </div>
+        </div>
+    </div>
 </div>

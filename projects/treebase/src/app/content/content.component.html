@@ -2,3 +2,6 @@
     <div class='close' *ngIf='!!back'><a [routerLink]='back'></a></div>
     <ng-content *ngIf='init'></ng-content>
 </div>
+<ng-container *ngIf='state_ && state_.legend'>
+    <app-legend [legend]='state_.legend'></app-legend>
+</ng-container>

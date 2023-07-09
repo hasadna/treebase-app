@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { StateService } from '../state.service';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { State } from '../state';
+import { FilterItem, State } from '../states/base-state';
+import { Router } from '@angular/router';
 
 @UntilDestroy()
 @Component({
@@ -11,8 +12,10 @@ import { State } from '../state';
 })
 export class FilterComponent {
   mode: string;
+  controls: FilterItem[] = [];
+  filters: any = {};
 
-  constructor(public stateSvc: StateService) {
+  constructor(public stateSvc: StateService, private router: Router) {
     this.stateSvc.state.pipe(
       untilDestroyed(this)
     ).subscribe(state => {
@@ -30,6 +33,41 @@ export class FilterComponent {
     } else {
       this.mode = 'none';
     }
+    this.controls = state.filterItems || [];
+    this.filters = state.filters || {};
   }
 
+  updateCheck(id: string, element: EventTarget | null) {
+    if (!element) {
+      return;
+    }
+    const checked = (element as HTMLInputElement).checked;
+    const queryParams: any = {};
+    queryParams[id] = checked ? '1' : '0';
+    this.router.navigate([], {
+      queryParams,
+      replaceUrl: true,
+      queryParamsHandling: 'merge',
+    });
+  }
+
+  isChecked(id: string): boolean {
+    return this.filters[id] !== '0';
+  }
+
+  selectValue(id: string, event: Event) {
+    const value = (event.target as HTMLSelectElement).value;
+    const queryParams: any = {};
+    queryParams[id] = value;
+    this.router.navigate([], {
+      queryParams,
+      replaceUrl: true,
+      queryParamsHandling: 'merge',
+    });
+  }
+
+  selectedValue(control: FilterItem): string {
+    console.log("SELECTED", this.filters[control.id], control.options[0].value)
+    return this.filters[control.id] || control.options[0].value;
+  }
 }

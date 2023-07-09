@@ -18,6 +18,7 @@ import { StatAreasComponent } from './stat-areas/stat-areas.component';
 import { StatAreaComponent } from './stat-area/stat-area.component';
 import { RegionComponent } from './region/region.component';
 import { SummaryComponent } from './summary/summary.component';
+import { LegendComponent } from './legend/legend.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { SummaryComponent } from './summary/summary.component';
     StatAreasComponent,
     StatAreaComponent,
     RegionComponent,
-    SummaryComponent
+    SummaryComponent,
+    LegendComponent
   ],
   imports: [
     BrowserModule,

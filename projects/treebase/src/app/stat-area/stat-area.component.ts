@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { State } from '../state';
+import { State } from '../states/base-state';
 
 @Component({
   selector: 'app-stat-area',
@@ -12,7 +12,7 @@ export class StatAreaComponent {
   sources: any[] = [];
   name = '';
 
-  set state(state: State) {
+  set state(state: State) {    
     this.stat_area = state.data[0][0] || {};
     this.sources = [];
     this.name = `איזור סטטיסטי ${this.stat_area['city_code']}/${this.stat_area['area_code'] || '0'}`

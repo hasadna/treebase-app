@@ -1,0 +1,48 @@
+@import url('../../common.less');
+
+:host {
+    background: @color-white;
+    box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.30);
+    padding: 12px;
+    display: flex;
+    flex-flow: column;
+    align-items: flex-start;
+    gap: 20px;
+    align-self: flex-end;
+    margin: 20px;
+    border-radius: 5px;
+
+    h2 {
+        .font-semibold;
+        font-size: 13px;
+        color: @color-grey;
+        margin: 0;
+    }
+
+    .items {
+        display: flex;
+        flex-flow: column;
+        gap: 8px;
+
+        .item {
+            display: flex;
+            flex-flow: row;
+            align-items: center;
+            gap: 10px;
+            
+            .color {
+                width: 28px;
+                height: 28px;
+                border-radius: 14px;
+                background: @color-green;
+            }
+
+            .label {
+                .font-regular;
+                color: @color-grey-2;
+                font-size: 16px;
+                line-height: 24px;
+            }
+        }
+    }
+}

@@ -1,7 +1,7 @@
-<app-content [init]='!!tree' [back]='["/", "trees"]' (state)='state = $event'>
+<app-content mode='tree' [init]='!!tree' [back]='["/", "trees"]' (state)='state = $event'>
     <div class='content' *ngIf='tree'>
         <h1>מזעץ: {{ tree['meta-tree-id'] }}</h1>
-        <div class='main-infos'>
+        <div class='main-infos section'>
             <div class='info'>
                 <span>סוג</span>
                 <span>{{ tree['attributes-genus-clean-he'] || 'לא ידוע' }}</span>
@@ -23,12 +23,17 @@
                 <span class='ltr'>{{ tree['cad_code'] }}</span>
             </div>
         </div>
-        <div class='sources'>
+        <div class='sources section'>
             <h2>רשימת מקורות המידע</h2>
             <div class='info' *ngFor='let source of sources'>
                 <span>{{source.name}}</span>
                 <span>{{source.date}}</span>
             </div>
+        </div>
+        <div class='street-view section'>
+            <h2>תצוגת רחוב</h2>
+            <iframe width="340" height="340" style="border:0" loading="lazy" allowfullscreen
+                    [src]='streetView'></iframe>     
         </div>
     </div>
 </app-content>
