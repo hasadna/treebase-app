@@ -1,6 +1,6 @@
 import * as Plot from '@observablehq/plot';
 
-import { State, LayerConfig, Chart, REGION_COLORING_OPTIONS, REGION_COLORING_INTERPOLATE, REGION_COLORING_PARAM, REGION_COLORING_LEGEND } from "./base-state";
+import { State, LayerConfig, Chart, REGION_COLORING_OPTIONS, REGION_COLORING_INTERPOLATE, REGION_COLORING_LEGEND, QP_REGION_COLORING, QP_REGION_COLORING_CAR } from "./base-state";
 
 export class StatAreasState extends State {
     constructor(filters: any) {
@@ -13,7 +13,7 @@ export class StatAreasState extends State {
                 '>', ['get', 'canopy_area_ratio'], 0
             ], null, null);
         }
-        const coloring = this.filters[REGION_COLORING_PARAM] || 'car';
+        const coloring = this.filters[QP_REGION_COLORING] || QP_REGION_COLORING_CAR;
         this.legend = REGION_COLORING_LEGEND[coloring];
         this.layerConfig['stat-areas-fill'].paint = {
             'fill-color': REGION_COLORING_INTERPOLATE[coloring],
@@ -34,18 +34,22 @@ export class StatAreasState extends State {
         if (data[0].length) {
             console.log("STAT-AREA DATA", data[0])
             this.charts.push(new Chart(
-                'התפלגות כיסוי חופות העצים בין האיזורים הסטטיסטיים:',
+                'התפלגות כיסוי חופות העצים בין האזורים הסטטיסטיים:',
                 Plot.plot({
                     height: 250,
                     width: 340,
                     marginLeft: 50,
                     y: {
                         grid: true,
-                        label: 'מספר א״ס',
-                        tickPadding: 20,            
+                        label: 'מספר האזורים',
+                        tickPadding: 20,
+                        labelAnchor: 'center',
+                        labelOffset: 40,
                     },
                     x: {
                         label: 'אחוז כיסוי חופות העצים',
+                        tickFormat: d => d + '%',
+                        labelAnchor: 'center',
                     },
                     marks: [
                         Plot.barY(data[0], {y: 'count', x: 'ratio', fill: '#204E37'}),

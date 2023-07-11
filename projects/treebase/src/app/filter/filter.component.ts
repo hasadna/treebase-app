@@ -14,6 +14,8 @@ export class FilterComponent {
   mode: string;
   controls: FilterItem[] = [];
   filters: any = {};
+  _selected: any = {};
+  _checked: any = {};
 
   constructor(public stateSvc: StateService, private router: Router) {
     this.stateSvc.state.pipe(
@@ -35,6 +37,12 @@ export class FilterComponent {
     }
     this.controls = state.filterItems || [];
     this.filters = state.filters || {};
+    this.controls.filter(control => control.kind === 'select').forEach(control => {
+      this._selected[control.id] = this.filters[control.id] || control.options[0].value;
+    });
+    this.controls.filter(control => control.kind === 'check').forEach(control => {
+      this._checked[control.id] = this.filters[control.id] !== '0';
+    });
   }
 
   updateCheck(id: string, element: EventTarget | null) {
@@ -51,12 +59,9 @@ export class FilterComponent {
     });
   }
 
-  isChecked(id: string): boolean {
-    return this.filters[id] !== '0';
-  }
-
   selectValue(id: string, event: Event) {
     const value = (event.target as HTMLSelectElement).value;
+    this._selected[id] = value;
     const queryParams: any = {};
     queryParams[id] = value;
     this.router.navigate([], {
@@ -64,10 +69,5 @@ export class FilterComponent {
       replaceUrl: true,
       queryParamsHandling: 'merge',
     });
-  }
-
-  selectedValue(control: FilterItem): string {
-    console.log("SELECTED", this.filters[control.id], control.options[0].value)
-    return this.filters[control.id] || control.options[0].value;
   }
 }

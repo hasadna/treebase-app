@@ -1,4 +1,4 @@
-import { State, LayerConfig, REGION_COLORING_OPTIONS, REGION_COLORING_INTERPOLATE, REGION_COLORING_PARAM, REGION_COLORING_LEGEND } from "./base-state";
+import { State, LayerConfig, REGION_COLORING_OPTIONS, REGION_COLORING_INTERPOLATE, REGION_COLORING_LEGEND, QP_REGION_COLORING, QP_REGION_COLORING_CAR } from "./base-state";
 
 export class MuniState extends State {
     constructor(id: string, filters: any) {
@@ -6,14 +6,14 @@ export class MuniState extends State {
         this.sql = [
             `SELECT * FROM munis WHERE "muni_code" = '${this.id}'`,
             `SELECT "meta-source" as name, count(1) as count FROM trees_processed WHERE "muni_code" = '${this.id}' GROUP BY 1 order by 2 desc`,
-            `SELECT count(1) as total_count FROM trees_processed WHERE "muni_code" = '${this.id}'`,
+            `SELECT count(distinct "meta-tree-id") as total_count FROM trees_processed WHERE "muni_code" = '${this.id}'`,
         ];
         for (const id of ['munis-label', 'munis-border', 'munis-fill']) {
             this.layerConfig[id] = new LayerConfig([
                 '==', ['get', 'muni_code'], ['literal', this.id]
             ], null, null);
         }
-        const coloring = this.filters[REGION_COLORING_PARAM] || 'car';
+        const coloring = this.filters[QP_REGION_COLORING] || QP_REGION_COLORING_CAR;
         this.legend = REGION_COLORING_LEGEND[coloring];
         this.layerConfig['munis-fill'].paint = {
             'fill-color': REGION_COLORING_INTERPOLATE[coloring],

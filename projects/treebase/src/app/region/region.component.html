@@ -4,7 +4,8 @@
         <div class='icon-info' *ngFor='let iconInfo of iconInfos'>
             <div class='icon' [style.backgroundImage]='"url(assets/img/icon-" + iconInfo.icon + ".svg)"'></div>
             <div class='text'>
-                <h2>{{iconInfo.text}}</h2>
+                <h2 class='tooltip' [matTooltip]='iconInfo.tooltip' *ngIf='iconInfo.tooltip'>{{iconInfo.text}}</h2>
+                <h2 *ngIf='!iconInfo.tooltip'>{{iconInfo.text}}</h2>
                 <div class='value'>
                     <span class='number'>{{iconInfo.value}}</span>
                     <span class='units'>{{iconInfo.units}}</span>

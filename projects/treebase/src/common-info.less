@@ -20,6 +20,10 @@ h2 {
     font-size: 13px;
     line-height: 12px;
     margin: 0;
+    &.tooltip {
+        text-decoration: underline dotted 1px @color-green;
+        cursor: help;
+    }
 }
 
 .section {
@@ -92,7 +96,8 @@ h2 {
             .value {
                 display: flex;
                 flex-flow: row;
-                align-items: baseline;
+                align-items: last baseline;
+                max-height: 18px;
                 gap: 3px;
 
                 .number {
@@ -122,6 +127,7 @@ h2 {
                     line-height: 24px;
                 }
                 .value {
+                    max-height: unset;
                     .number {
                         font-size: 40px;
                         line-height: 24px;

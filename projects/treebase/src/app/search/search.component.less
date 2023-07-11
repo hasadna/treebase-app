@@ -1,0 +1,79 @@
+@import url(../../common.less);
+
+:host {
+    display: flex;
+    flex-flow: column;
+    align-items: flex-start;
+    margin: 20px;
+    pointer-events: all;
+    gap: 4px;
+
+    .input-container {
+        width: 340px;
+        border-radius: 5px;
+        background-color: @color-white;
+        .background-image;
+        background-image: url('../../assets/img/icon-search.svg');
+        background-size: 24px;
+        background-position: 12px center;
+        box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.30);
+
+        input {
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 5px;
+            border: 1px solid @color-grey;
+            background: transparent;
+            .font-regular;
+            font-size: 16px;
+            line-height: 24px;
+            color: @color-grey;
+
+            &::placeholder {
+                color: @color-midgrey;
+                opacity: 1;
+            }
+
+            &:focus {
+                outline: none;
+                border-width: 2px;
+                padding: 7px 11px;
+            }
+        }
+    }
+
+    .search-results {
+        width: 340px;
+        border-radius: 5px;
+        background-color: @color-white;
+        // .background-image;
+        // background-image: url('../../assets/img/icon-search.svg');
+        // background-size: 24px;
+        // background-position: 12px center;
+        box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.30);
+        display: flex;
+        flex-flow: column;
+        .result {
+            width: 100%;
+            padding: 8px 12px;
+            .font-regular;
+            font-size: 16px;
+            line-height: 24px;
+            color: @color-grey;
+            cursor: pointer;
+            &:hover {
+                background-color: @color-light-green;
+            }
+            .text {
+                .prefix {
+                    color: @color-midgrey;
+                }
+                ::ng-deep {
+                    em {
+                        .font-semibold;
+                    }
+                }    
+            }
+        }
+    }
+}

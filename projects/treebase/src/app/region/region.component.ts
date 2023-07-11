@@ -4,7 +4,8 @@ type IconInfo = {
   field?: string;
   text: string;
   icon: string;
-  value?: string | ((record: any) => string);
+  tooltip?: string;
+  value?: string | ((record: any) => string | null);
   units?: string | ((record: any) => string);
 };
 
@@ -40,6 +41,7 @@ const ICON_INFOS: IconInfo[] = [
   {
     text: 'כיסוי חופות',
     icon: 'canopy-coverage',
+    tooltip: 'סך החופות מסך שטח הרשות',
     units: '',
     value: (row) => (row.canopy_area_ratio * 100).toFixed(0) + '%',
   },
@@ -58,26 +60,27 @@ const ICON_INFOS: IconInfo[] = [
   {
     text: 'מס׳ עצים לנפש',
     icon: 'trees-per-person',
-    field: 'trees_per_person',
     units: '',
+    value: (row) => (row.total_count && row.population) ? (row.total_count/row.population).toLocaleString(undefined, {maximumFractionDigits: 2}) : null,
   },
   {
     text: 'שטח חופות לנפש',
     icon: 'canopies-per-person',
-    field: 'canopy_area_per_person',
-    units: 'קמ״ר',
+    units: 'מ״ר',
+    value: (row) => (row.canopy_area && row.population) ? (row.canopy_area/row.population).toFixed(2) : null,
   },
   {
-    text: 'מדד סוציואקונומי',
+    text: 'אשכול חברתי/כלכלי',
     icon: 'socioeconomic-index',
-    field: 'socioeconomic_index',
+    tooltip: 'לפי נתוני למ״ס 2020',
     units: '',
+    value: (row) => row.socioeconomic_index ? `${row.socioeconomic_index.toFixed(0)}/10` : null,
   },
   {
     text: 'צפיפות',
     icon: 'population-density',
-    field: 'population_density',
     units: 'נפשות לקמ"ר',
+    value: (row) => row.population_density?.toFixed(1),
   },
 ];
 
@@ -104,12 +107,10 @@ export class RegionComponent implements OnChanges {
         } else if (typeof iconInfo.value === 'function') {
           value = iconInfo.value(this.record);
         }
-        console.log('value 1', value);
         let units = iconInfo.units;
         if (typeof units === 'function') {
           units = units(this.record);
         }
-        console.log('value 2', units);
         if (value !== null && value !== undefined && units !== null && units !== undefined) {
           if (typeof value === 'number') {
             value = value.toLocaleString();
@@ -117,6 +118,7 @@ export class RegionComponent implements OnChanges {
           this.iconInfos.push({
             text: iconInfo.text,
             icon: iconInfo.icon,
+            tooltip: iconInfo.tooltip,
             value, units,
           });
         }

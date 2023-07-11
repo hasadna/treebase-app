@@ -1,13 +1,14 @@
 import * as Plot from '@observablehq/plot';
 
-import { State, LayerConfig, Chart, TREE_COLOR_INTERPOLATE, TREE_COLOR_LEGEND, CheckFilterItem, TREE_FILTER_ITEMS } from "./base-state";
+import { State, LayerConfig, Chart, TREE_COLOR_INTERPOLATE, TREE_COLOR_LEGEND, CheckFilterItem, TREE_FILTER_ITEMS, SelectFilterItem, FilterOption } from "./base-state";
 
 export class TreesState extends State {
     constructor(filters: any) {
         super('trees', undefined, filters);
         this.sql = [
-            `SELECT count(distinct "meta-tree-id") as count FROM trees_processed`,
-            `SELECT "meta-collection-type" || '\n' || "meta-source-type" as name, count(1) as count FROM trees_processed GROUP BY 1 order by 2 desc`,
+            `SELECT count(distinct "meta-tree-id") AS count FROM trees_processed`,
+            `SELECT "meta-collection-type" || '\n' || "meta-source-type" AS name, count(1) AS count FROM trees_processed GROUP BY 1 ORDER BY 2 DESC`,
+            `SELECT "attributes-genus-clean-he" AS genus_he, "attributes-genus-clean-en" AS genus_en FROM trees_processed WHERE "attributes-genus-clean-he" is not NULL GROUP BY 1, 2 ORDER BY 1`,
         ];
         const layers = ['trees'];
         if (this.filters.canopies !== '0') {
@@ -23,6 +24,11 @@ export class TreesState extends State {
             'circle-color': TREE_COLOR_INTERPOLATE,
             'circle-stroke-width': 0
         };
+        if (this.filters.certainty !== 'all') {
+            this.layerConfig['trees'].filter = [
+                '==', ['get', 'certainty'], this.filters.certainty === 'certain'
+            ]
+        }
         this.legend = TREE_COLOR_LEGEND;
         this.filterItems = TREE_FILTER_ITEMS;
     }
@@ -63,6 +69,14 @@ export class TreesState extends State {
                     ]
                 })
             ));
+        }
+        if (data[2].length) {
+            this.filterItems = [...this.filterItems, new SelectFilterItem(
+                'genus',
+                'סינון לפי מין העץ...',
+                [new FilterOption('all', 'כל המינים'),
+                 ...data[2].map((d: any) => new FilterOption(d['genus_en'], d['genus_he']))]
+            )];
         }
     }
 

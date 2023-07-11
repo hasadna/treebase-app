@@ -28,7 +28,6 @@ export class AppComponent {
         };
       })
     ).subscribe(({segments, params}) => {
-      console.log('url changed', segments, params);
       this.state.initFromUrl(segments, params);
     });
   }

@@ -4,6 +4,7 @@ import * as mapboxgl from 'mapbox-gl';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { StateService } from '../state.service';
 import { Router } from '@angular/router';
+import { ApiService } from '../api.service';
 
 @UntilDestroy()
 @Component({
@@ -40,8 +41,11 @@ export class MapComponent implements AfterViewInit{
 
   map: mapboxgl.Map;
 
+  focus: string|null = null;
 
-  constructor(private mapboxService: MapboxService, private state: StateService, private router: Router) {
+
+  constructor(private mapboxService: MapboxService, private state: StateService,
+              private router: Router, private api: ApiService) {
   }
 
   ngAfterViewInit() {
@@ -69,13 +73,12 @@ export class MapComponent implements AfterViewInit{
 
     this.map.on('load', () => {
       this.CLICKS.forEach(([layer, base, prop]) => {
-        console.log('click', layer, base, prop);
         this.map.on('click', layer, (e) => {
           const features = e.features;
           if (features && features.length > 0) {
             const feature: any = features[0];
             if (feature.properties?.[prop]) {
-              this.router.navigate([base, feature.properties[prop]]);
+              this.router.navigate([base, feature.properties[prop]], {queryParamsHandling: 'merge'});
             }
           }
         });
@@ -125,9 +128,7 @@ export class MapComponent implements AfterViewInit{
               this.map.setFilter(layer.id, null);
             }
             if (lc?.paint) {
-              console.log('lc paint', layer.id, lc.paint);
               Object.keys(lc.paint).forEach((key) => {
-                console.log('set paint', layer.id, key, lc.paint[key]);
                 this.map.setPaintProperty(layer.id, key, lc.paint[key]);
               });
             }
@@ -138,6 +139,28 @@ export class MapComponent implements AfterViewInit{
             }
           }
         });
+        if (state.filters?.focus) {
+          if (this.focus !== state.filters?.focus) {
+            this.focus = state.filters?.focus;
+            const parts = this.focus?.split(':');
+            if (parts?.length === 2) {
+              let QUERY: string|null = null;
+              if (parts[0] === 'parcel') {
+                QUERY = `SELECT bounds FROM parcels WHERE code='${parts[1]}'`;
+              } else if (parts[0] === 'roads') {
+                QUERY = `SELECT bounds FROM roads WHERE road_id='${parts[1]}'`;
+              }
+              if (QUERY) {
+                this.api.query(QUERY).subscribe((res) => {
+                  this.map.fitBounds(res[0].bounds, {padding: {top:0, bottom:0, left:0, right: 400}});
+                });  
+              }
+            }
+          }
+        } else {
+          this.focus = null;
+        }
+
       });  
     });
   }

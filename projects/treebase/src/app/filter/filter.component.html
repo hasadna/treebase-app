@@ -1,21 +1,21 @@
 <div class='filter'>
     <div class='selector'>
         <span [class]='"selected " + mode'></span>
-        <a class='munis' [routerLink]='["/", "munis"]' [class.active]='mode === "munis"'>רשויות</a>
-        <a class='stat-areas' [routerLink]='["/", "stat-areas"]' [class.active]='mode === "stat-areas"'>א״ס</a>
-        <a class='trees' [routerLink]='["/", "trees"]' [class.active]='mode === "trees"'>עצים</a>
+        <a class='munis' [routerLink]='["/", "munis"]' [class.active]='mode === "munis"' queryParamsHandling='merge'>רשויות</a>
+        <a class='stat-areas' [routerLink]='["/", "stat-areas"]' [class.active]='mode === "stat-areas"' queryParamsHandling='merge'>אזורים</a>
+        <a class='trees' [routerLink]='["/", "trees"]' [class.active]='mode === "trees"' queryParamsHandling='merge'>עצים</a>
     </div>
     <div class='controls'>
         <div class='control' *ngFor='let control of controls'>
             <div class='check' *ngIf='control.kind === "check"'>
-                <input type='checkbox' [id]='control.id' [checked]='isChecked(control.id)' (change)='updateCheck(control.id, $event.target)'>
+                <input type='checkbox' [id]='control.id' [checked]='_checked[control.id]' (change)='updateCheck(control.id, $event.target)'>
                 <label [for]='control.id'>{{ control.label }}</label>
             </div>
             <div class='select' *ngIf='control.kind === "select"'>
                 <label [for]='control.id'>{{ control.label }}</label>
                 <select [id]='control.id' (change)='selectValue(control.id, $event)'>
                     <option *ngFor='let option of control.options' [value]='option.value'
-                            [selected]='option.value===selectedValue(control)'
+                            [selected]='option.value===_selected[control.id]'
                     >{{ option.label }}</option>
                 </select>
             </div>

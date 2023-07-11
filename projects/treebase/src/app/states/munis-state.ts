@@ -1,6 +1,6 @@
 import * as Plot from '@observablehq/plot';
 
-import { State, LayerConfig, Chart, REGION_COLORING_OPTIONS, REGION_COLORING_INTERPOLATE, REGION_COLORING_PARAM, REGION_COLORING_LEGEND } from "./base-state";
+import { State, LayerConfig, Chart, REGION_COLORING_OPTIONS, REGION_COLORING_INTERPOLATE, REGION_COLORING_LEGEND, QP_REGION_COLORING, QP_REGION_COLORING_CAR } from "./base-state";
 
 export class MunisState extends State {
     constructor(filters: any) {
@@ -13,7 +13,7 @@ export class MunisState extends State {
                 '>', ['get', 'canopy_area_ratio'], 0
             ], null, null);
         }
-        const coloring = this.filters[REGION_COLORING_PARAM] || 'car';
+        const coloring = this.filters[QP_REGION_COLORING] || QP_REGION_COLORING_CAR;
         this.legend = REGION_COLORING_LEGEND[coloring];
         this.layerConfig['munis-fill'].paint = {
             'fill-color': REGION_COLORING_INTERPOLATE[coloring],
@@ -44,6 +44,8 @@ export class MunisState extends State {
                     x: {
                         grid: true,
                         tickFormat: d => d + '%',
+                        label: 'אחוז כיסוי חופות העצים',
+                        labelAnchor: 'center',
                     },
                     marks: [
                         Plot.barX(data[0].slice(0,10), {
@@ -74,6 +76,13 @@ export class MunisState extends State {
                         grid: true,
                         label: 'מספר רשויות',
                         tickPadding: 15,
+                        labelAnchor: 'center',
+                        labelOffset: 30,
+                    },
+                    x: {
+                        label: 'אחוז כיסוי חופות העצים',
+                        tickFormat: d => d + '%',
+                        labelAnchor: 'center',
                     },
                     marks: [
                         Plot.rectY(data[0], {
@@ -81,7 +90,6 @@ export class MunisState extends State {
                             fill: '#204E37',
                         }),
                         Plot.ruleY([0]),
-                        Plot.ruleX([0]),
                     ]
                 })
             ));

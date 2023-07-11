@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import {MatTooltipModule} from '@angular/material/tooltip'; 
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -19,6 +20,7 @@ import { StatAreaComponent } from './stat-area/stat-area.component';
 import { RegionComponent } from './region/region.component';
 import { SummaryComponent } from './summary/summary.component';
 import { LegendComponent } from './legend/legend.component';
+import { SearchComponent } from './search/search.component';
 
 @NgModule({
   declarations: [
@@ -37,12 +39,14 @@ import { LegendComponent } from './legend/legend.component';
     StatAreaComponent,
     RegionComponent,
     SummaryComponent,
-    LegendComponent
+    LegendComponent,
+    SearchComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    MatTooltipModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

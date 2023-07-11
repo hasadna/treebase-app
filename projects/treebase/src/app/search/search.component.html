@@ -1,0 +1,8 @@
+<div class='input-container'>
+    <input #input type='text' placeholder='חיפוש עיר, רחוב, אזור סטטיסטי, חלקה...' (keyup)='change($event)' (change)='change($event)'>
+</div>
+<div class='search-results' *ngIf='results.length > 0'>
+    <div class='result' *ngFor='let result of results' (click)='handle(result)'>
+        <div class='text' [innerHTML]='result.render()'></div>
+    </div>
+</div>

@@ -15,7 +15,7 @@ export class StatAreaComponent {
   set state(state: State) {    
     this.stat_area = state.data[0][0] || {};
     this.sources = [];
-    this.name = `איזור סטטיסטי ${this.stat_area['city_code']}/${this.stat_area['area_code'] || '0'}`
+    this.name = `אזור סטטיסטי ${this.stat_area['city_code']}/${this.stat_area['area_code'] || '0'}`
     for (const row of state.data[1]) {
       if (row['name'] && row['count']) {
         this.sources.push({
