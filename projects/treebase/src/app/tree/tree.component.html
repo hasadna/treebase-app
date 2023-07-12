@@ -4,7 +4,7 @@
         <div class='main-infos section'>
             <div class='info'>
                 <span>סוג</span>
-                <span>{{ tree['attributes-genus-clean-he'] || 'לא ידוע' }}</span>
+                <span>{{ tree['attributes_genus_clean_he'] || 'לא ידוע' }}</span>
             </div>
             <div class='info'>
                 <span>נ.צ</span>
@@ -31,7 +31,7 @@
             </div>
         </div>
         <div class='street-view section'>
-            <h2>תצוגת רחוב</h2>
+            <h2>תצוגת רחוב (עדכניות לפי מפות Google)</h2>
             <iframe width="340" height="340" style="border:0" loading="lazy" allowfullscreen
                     [src]='streetView'></iframe>     
         </div>

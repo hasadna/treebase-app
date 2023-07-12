@@ -9,6 +9,7 @@ export class TreeState extends State {
         }
         this.layerConfig['trees'].paint = {
             'circle-color': TREE_COLOR_INTERPOLATE,
+            'circle-stroke-color': '#ff871f',
             'circle-stroke-width': [
                 'case',
                 ['==', ['get', 'tree-id'], ['literal', this.id]],

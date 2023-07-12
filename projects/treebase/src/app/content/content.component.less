@@ -43,11 +43,23 @@
         }
     }
 
-    .widgets {
-        display: flex;
-        flex-flow: column;
-        align-items: flex-start;
-        justify-content: space-between;
+    .window {
         height: 100%;
+        flex: 1 1 auto;
+        display: flex;
+        flex-flow: row;
+        align-items: stretch;
+
+        .widgets {
+            display: flex;
+            flex-flow: column;
+            align-items: flex-start;
+            justify-content: space-between;
+            height: 100%;
+        }
+
+        &.interactive {
+            pointer-events: all;
+        }
     }
 }

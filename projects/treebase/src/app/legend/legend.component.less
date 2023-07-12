@@ -22,6 +22,7 @@
         display: flex;
         flex-flow: column;
         gap: 8px;
+        width: 100%;
 
         .item {
             display: flex;
@@ -41,6 +42,11 @@
                 color: @color-grey-2;
                 font-size: 16px;
                 line-height: 24px;
+            }
+
+            &.separated {
+                border-top: 1px dotted @color-midgrey;
+                padding-top: 7px;
             }
         }
     }

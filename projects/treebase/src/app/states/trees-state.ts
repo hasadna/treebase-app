@@ -22,7 +22,14 @@ export class TreesState extends State {
         }
         this.layerConfig['trees'].paint = {
             'circle-color': TREE_COLOR_INTERPOLATE,
-            'circle-stroke-width': 0
+            'circle-stroke-width': [
+                "interpolate",
+                ["linear"],
+                ["zoom"],
+                15, 0,
+                18, 1
+              ],
+            'circle-stroke-color': '#ffffff',
         };
         if (this.filters.certainty !== 'all') {
             this.layerConfig['trees'].filter = [
@@ -60,6 +67,8 @@ export class TreesState extends State {
                         Plot.text(sources, {
                             x: 'count',
                             y: 'name',
+                            tip: 'x',
+                            title: d => `${d['count'].toLocaleString()} עצים (${(d['count'] / total * 100).toFixed(1)}%)`,
                             text: 'name',
                             textAnchor: 'end',
                             dx: 3,

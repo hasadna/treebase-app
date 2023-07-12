@@ -3,6 +3,7 @@ import { State, StateMode } from '../states/base-state';
 import { StateService } from '../state.service';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { delay, filter, tap } from 'rxjs';
+import { Router } from '@angular/router';
 
 @UntilDestroy()
 @Component({
@@ -19,7 +20,7 @@ export class ContentComponent implements OnInit{
   
   state_: State;
 
-  constructor(private stateSvc: StateService) {
+  constructor(private stateSvc: StateService, private router: Router) {
   }
 
   ngOnInit() {
@@ -31,6 +32,12 @@ export class ContentComponent implements OnInit{
       this.state_ = state;
       this.state.emit(state);
     });
+  }
+
+  goBack() {
+    if (this.back) {
+      this.router.navigate(this.back, {queryParamsHandling: 'merge'});
+    }
   }
     
 }

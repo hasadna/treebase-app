@@ -13,6 +13,7 @@ export class StatAreasState extends State {
                 '>', ['get', 'canopy_area_ratio'], 0
             ], null, null);
         }
+        this.layerConfig['munis-label'] = new LayerConfig(null, null, null);
         const coloring = this.filters[QP_REGION_COLORING] || QP_REGION_COLORING_CAR;
         this.legend = REGION_COLORING_LEGEND[coloring];
         this.layerConfig['stat-areas-fill'].paint = {
