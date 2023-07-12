@@ -16,6 +16,11 @@ export class TreeState extends State {
                 3, 0
             ]
         };
+        if (this.filters.certainty !== 'all') {
+            this.layerConfig['trees'].filter = [
+                '==', ['get', 'certainty'], this.filters.certainty === 'certain'
+            ]
+        }
         this.legend = TREE_COLOR_LEGEND;
         this.filterItems = TREE_FILTER_ITEMS;
     }

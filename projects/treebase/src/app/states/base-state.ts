@@ -13,7 +13,7 @@ export class Chart {
 }
 
 export class LegendItem {
-    constructor(public color: string, public label: string, public separated=false) {}
+    constructor(public color: string, public label: string, public separated=false, public scaled=false) {}
 }
 
 export class Legend {
@@ -154,9 +154,9 @@ REGION_COLORING_LEGEND[QP_REGION_COLORING_QUALITY] = new Legend('מקרא איכ
 ]);
 REGION_COLORING_LEGEND[QP_REGION_COLORING_CAR] = new Legend('מקרא כיסוי חופות העצים', [
     new LegendItem('#155b2e', 'כיסוי גבוה'),
-    // new LegendItem('#3b7f53', ''),
-    new LegendItem('#60a478', 'כיסוי בינוני'),
-    // new LegendItem('#86c89d', ''),
+    new LegendItem('#3b7f53', ''),
+    new LegendItem('#60a478', '↑', false, true),
+    new LegendItem('#86c89d', ''),
     new LegendItem('#acecc2', 'כיסוי נמוך'),
     new LegendItem('#ccc', 'אין מידע', true),
 ], 'ככל שיש יותר מקורות מידע ניתן להצליב ולטייב נתונים ולשפר את איכות המידע');
