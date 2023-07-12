@@ -1,8 +1,16 @@
-<div class='input-container'>
-    <input #input type='text' placeholder='חיפוש עיר, רחוב, אזור סטטיסטי, חלקה...' (keyup)='change($event)' (change)='change($event)'>
-</div>
-<div class='search-results' *ngIf='results.length > 0'>
-    <div class='result' *ngFor='let result of results' (click)='handle(result)'>
-        <div class='text' [innerHTML]='result.render()'></div>
+<ng-container *ngIf='!focus'>
+    <div class='input-container'>
+        <input #input type='text' placeholder='חיפוש עיר, רחוב, אזור סטטיסטי, חלקה...' (keyup)='change($event)' (change)='change($event)'>
     </div>
-</div>
+    <div class='search-results' *ngIf='results.length > 0'>
+        <div class='result' *ngFor='let result of results' (click)='handle(result)'>
+            <div class='text' [innerHTML]='result.render()'></div>
+        </div>
+    </div>
+</ng-container>
+<ng-container *ngIf='!!focus'>
+    <div class='focused'>
+        <div class='text' [innerHTML]='focus.display()'></div>
+        <a class='close' [routerLink]='[]' [queryParams]='{focus: null}' queryParamsHandling='merge'></a>
+    </div>
+</ng-container>

@@ -1,0 +1,21 @@
+@import url(../../common.less);
+
+:host {
+    button {
+        pointer-events: all;
+        width: 48px;
+        height: 48px;
+        border-radius: 24px;
+        background-color: @color-green-good;
+        cursor: pointer;
+        border: none;
+        &:hover {
+            background-color: @color-nice-green;
+            box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.30);
+            transform: translateY(-2px);
+        }
+        .background-image;
+        background-image: url('../../assets/img/icon-download.svg');
+        background-size: 24px;
+    }
+}

@@ -1,9 +1,12 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { State } from '../states/base-state';
-import { Subject, debounceTime, distinctUntilChanged, switchMap, timer } from 'rxjs';
+import { Subject, debounceTime, distinctUntilChanged, map, switchMap, timer } from 'rxjs';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { ApiService, SearchResult } from '../api.service';
+import { ApiService } from '../api.service';
 import { Router } from '@angular/router';
+import { StateService } from '../state.service';
+import { SearchResult } from '../states/search-types';
+import { FocusMode } from '../states/focus-modes';
 
 @UntilDestroy()
 @Component({
@@ -12,14 +15,13 @@ import { Router } from '@angular/router';
   styleUrls: ['./search.component.less']
 })
 export class SearchComponent {
-  @Input() state: State;
-
   @ViewChild('input') input: ElementRef<HTMLInputElement>;
 
   terms = new Subject<string>();
   results: SearchResult[] = [];
+  focus: FocusMode | null = null;
 
-  constructor(private api: ApiService, public router: Router) {
+  constructor(private api: ApiService, public router: Router, private state: StateService) {
     this.terms.pipe(
       untilDestroyed(this),
       distinctUntilChanged(),
@@ -31,7 +33,16 @@ export class SearchComponent {
     ).subscribe(results => {
       this.results = results;
     });
+    this.state.state.pipe(
+      untilDestroyed(this),
+      distinctUntilChanged((a, b) => a.filters?.focus === b.filters?.focus),
+      map(state => state.focus),
+    ).subscribe(focus => {
+      this.focus = focus;
+    });
   }
+
+
 
   change(event: Event) {
     const input = event.target as HTMLInputElement;

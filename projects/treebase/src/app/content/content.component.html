@@ -4,9 +4,11 @@
 </div>
 <div class='window' [class.interactive]='!!back' (click)='goBack()'>
     <div class='widgets'>
-        <app-search [state]='state_'></app-search>
-        <ng-container *ngIf='state_ && state_.legend'>
-            <app-legend [legend]='state_.legend'></app-legend>
-        </ng-container>    
+        <div class='column'>
+            <app-search></app-search>
+            <ng-container *ngIf='state_ && state_.legend'>
+                <app-legend [legend]='state_.legend'></app-legend>
+            </ng-container>    
+        </div>
     </div>    
 </div>

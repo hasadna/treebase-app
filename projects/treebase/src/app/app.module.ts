@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import {MatTooltipModule} from '@angular/material/tooltip'; 
+import { MatTooltipModule } from '@angular/material/tooltip'; 
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -21,6 +23,8 @@ import { RegionComponent } from './region/region.component';
 import { SummaryComponent } from './summary/summary.component';
 import { LegendComponent } from './legend/legend.component';
 import { SearchComponent } from './search/search.component';
+import { ShareComponent } from './share/share.component';
+import { ExportComponent } from './export/export.component';
 
 @NgModule({
   declarations: [
@@ -40,13 +44,17 @@ import { SearchComponent } from './search/search.component';
     RegionComponent,
     SummaryComponent,
     LegendComponent,
-    SearchComponent
+    SearchComponent,
+    ShareComponent,
+    ExportComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     MatTooltipModule,
+    MatSnackBarModule,
+    BrowserAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,5 +1,6 @@
 import { Observable, from, forkJoin, tap } from "rxjs";
 import { ApiService } from "../api.service";
+import { FocusMode } from "./focus-modes";
 
 export type StateMode = 'about' | 'trees' | 'tree' | 'stat-areas' | 'stat-area' | 'munis' | 'muni' | 'empty';
 
@@ -59,16 +60,25 @@ export class State {
     charts: Chart[] = [];
     legend: Legend | null = null;
     filterItems: FilterItem[] = [];
+    focus: FocusMode|null = null;
+    focusQuery: string;
 
-    constructor(public mode: StateMode, public id?: string, public filters: any = {}) {}
+    constructor(public mode: StateMode, public id?: string, public filters: any = {}) {
+        if (this.filters.focus) {
+            this.focus = FocusMode.fromQueryParam(this.filters.focus) || null;
+        } else {
+            this.focus = null;
+        }
+        this.focusQuery = this.focus?.treesQuery() || 'TRUE';
+    }
     
     process(api: ApiService): Observable<any> {
-        const ret = from([true]);
+        let ret: Observable<any> = from([true]);
         if (this.processed) {
             return ret;
         }
         if (this.sql.length) {
-            return forkJoin(this.sql.map(sql => api.query(sql))).pipe(
+            ret = forkJoin(this.sql.map(sql => api.query(sql))).pipe(
                 tap((data: any[][]) => {
                     this.processed = true;
                     this.data = data;

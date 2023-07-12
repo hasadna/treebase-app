@@ -41,7 +41,7 @@ export class MapComponent implements AfterViewInit{
 
   map: mapboxgl.Map;
 
-  focus: string|null = null;
+  focus_: string|null = null;
 
 
   constructor(private mapboxService: MapboxService, private state: StateService,
@@ -112,6 +112,19 @@ export class MapComponent implements AfterViewInit{
           });
         }
         console.log('STATE', state, this.map.getStyle().layers);
+        if (state.filters?.focus !== this.focus_) {
+          this.focus_ = state.filters?.focus;
+          if (state.focus) {
+            const QUERY = state.focus.boundsQuery();
+            if (QUERY) {
+              this.api.query(QUERY).subscribe((res) => {
+                this.map.fitBounds(res[0].bounds, {padding: {top:0, bottom:0, left:0, right: 400}});
+              });
+            }
+          }
+        }
+        const extraFilters = state.focus?.mapFilters() || {};
+
         this.map.getStyle().layers.forEach((layer) => {
           if (this.ownLayer(layer)) {
             if (state.isLayerVisible(layer.id)) {
@@ -122,8 +135,18 @@ export class MapComponent implements AfterViewInit{
             }
             const lc = state.getLayerConfig(layer.id);
             console.log('OWN LAYER', layer.id, lc);
+            const filters: any[][] = [];
             if (lc?.filter) {
-              this.map.setFilter(layer.id, lc.filter);
+              filters.push(lc.filter);
+            } 
+            if (extraFilters[layer.id]) {
+              filters.push(extraFilters[layer.id]);
+            }
+            console.log('FILTERS', extraFilters, lc.filter, filters.length, ['all', ...filters]);
+            if (filters.length > 1) {
+              this.map.setFilter(layer.id, ['all', ...filters]);
+            } else if (filters.length === 1) {
+              this.map.setFilter(layer.id, filters[0]);
             } else {
               this.map.setFilter(layer.id, null);
             }
@@ -139,28 +162,6 @@ export class MapComponent implements AfterViewInit{
             }
           }
         });
-        if (state.filters?.focus) {
-          if (this.focus !== state.filters?.focus) {
-            this.focus = state.filters?.focus;
-            const parts = this.focus?.split(':');
-            if (parts?.length === 2) {
-              let QUERY: string|null = null;
-              if (parts[0] === 'parcel') {
-                QUERY = `SELECT bounds FROM parcels WHERE code='${parts[1]}'`;
-              } else if (parts[0] === 'roads') {
-                QUERY = `SELECT bounds FROM roads WHERE road_id='${parts[1]}'`;
-              }
-              if (QUERY) {
-                this.api.query(QUERY).subscribe((res) => {
-                  this.map.fitBounds(res[0].bounds, {padding: {top:0, bottom:0, left:0, right: 400}});
-                });  
-              }
-            }
-          }
-        } else {
-          this.focus = null;
-        }
-
       });  
     });
   }

@@ -2,65 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, catchError, from, map, tap } from 'rxjs';
+import { FocusSearchResult, MuniSearchResult, ParcelSearchResult, SEARCH_CONFIG, SearchResult, StatAreaSearchResult } from './states/search-types';
+import { RoadFocusMode } from './states/focus-modes';
 
-
-export class SearchResult {
-  constructor(public term: string, public prefix: string, public display: string) {}
-
-  public click(router: Router) {}
-
-  public render() {
-    return `<span class="prefix">${this.prefix}</span>&nbsp;<span class='result'>${this.display.replace(this.term, '<em>' + this.term + '</em>')}</span>`;
-  }
-}
-
-export class URLSearchResult extends SearchResult {
-  private url: string[];
-  private params: any = {};
-
-  constructor(row: any, url: string[], params: any={}) {
-    super(row.term, row.prefix, row.display);
-    this.url = url;
-    this.params = params;
-  }
-
-  override click(router: Router) {
-    router.navigate(this.url, this.params);
-  }
-}
-
-export class MuniSearchResult extends URLSearchResult {
-  constructor(row: any) {
-    super(row, ['munis', row.code]);
-  }
-}
-
-export class StatAreaSearchResult extends URLSearchResult {
-  constructor(row: any) {
-    super(row, ['stat-areas', row.code]);
-  }
-}
-
-export class FocusSearchResult extends URLSearchResult {
-  constructor(row: any, queryParams: any={}) {
-    super(row, ['trees'], {
-      queryParams: Object.assign({focus: `${row.kind}:${row.code}`}, queryParams),
-      queryParamsHandling: 'merge',
-      replaceUrl: true
-    });
-  }
-}
-
-export class ParcelSearchResult extends FocusSearchResult {
-  constructor(row: any) {
-    super(row, {cadaster: '1'});
-  }
-}
-
-export class SearchConfig {
-  constructor(public kind: string, public table: string, public field: string, public code: string, public prefix: string) {
-  }
-}
 
 @Injectable({
   providedIn: 'root'
@@ -68,12 +12,6 @@ export class SearchConfig {
 export class ApiService {
 
   cache: any = {};
-  SEARCH_CONFIG = [
-    new SearchConfig('muni', 'munis', 'muni_name', 'muni_code', 'רשות מקומית:'),
-    new SearchConfig('stat-area', 'stat_areas', 'code', 'code', 'אזור סטטיסטי:'),
-    new SearchConfig('parcel', 'parcels', 'code', 'code', 'גוש/חלקה:'),
-    new SearchConfig('roads', 'roads', 'road_id', 'road_id', 'רחוב:'),
-  ];
 
   constructor(private http: HttpClient) {
   }
@@ -106,7 +44,7 @@ export class ApiService {
 
   search(term: string): Observable<SearchResult[]> {
     const queries = [];
-    for (const config of this.SEARCH_CONFIG) {
+    for (const config of SEARCH_CONFIG) {
       let query = `(SELECT
           '${config.kind}' AS kind,
           '${config.prefix}' AS prefix,
@@ -152,7 +90,7 @@ export class ApiService {
           } else if (row.kind === 'parcel') {
             return new ParcelSearchResult(row);
           } else if (row.kind === 'roads') {
-            return new FocusSearchResult(row);
+            return new FocusSearchResult(row, new RoadFocusMode(row.code));
           } else if (row.kind === 'stat-area') {
             return new StatAreaSearchResult(row);
           }

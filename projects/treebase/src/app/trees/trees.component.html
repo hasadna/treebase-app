@@ -4,7 +4,7 @@
             <div class='icon-info big'>
                 <div class='icon' [style.backgroundImage]='"url(assets/img/icon-tree-count.svg)"'></div>
                 <div class='text'>
-                    <h2>סה״כ עצים במאגר</h2>
+                    <h2 [innerHTML]='"סה״כ עצים ב" + (state.focus?.display() || "מאגר")'></h2>
                     <div class='value'>
                         <span class='number'>{{state.data[0][0].count.toLocaleString()}}</span>
                         <span class='units'></span>

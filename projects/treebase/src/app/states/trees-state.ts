@@ -4,12 +4,7 @@ import { State, LayerConfig, Chart, TREE_COLOR_INTERPOLATE, TREE_COLOR_LEGEND, C
 
 export class TreesState extends State {
     constructor(filters: any) {
-        super('trees', undefined, filters);
-        this.sql = [
-            `SELECT count(distinct "meta-tree-id") AS count FROM trees_processed`,
-            `SELECT "meta-collection-type" || '\n' || "meta-source-type" AS name, count(1) AS count FROM trees_processed GROUP BY 1 ORDER BY 2 DESC`,
-            `SELECT "attributes-genus-clean-he" AS genus_he, "attributes-genus-clean-en" AS genus_en FROM trees_processed WHERE "attributes-genus-clean-he" is not NULL GROUP BY 1, 2 ORDER BY 1`,
-        ];
+        super('trees', undefined, filters);    
         const layers = ['trees'];
         if (this.filters.canopies !== '0') {
             layers.push('canopies');
@@ -31,11 +26,22 @@ export class TreesState extends State {
               ],
             'circle-stroke-color': '#ffffff',
         };
+        let certaintyCondition = 'TRUE';
         if (this.filters.certainty !== 'all') {
             this.layerConfig['trees'].filter = [
                 '==', ['get', 'certainty'], this.filters.certainty === 'certain'
             ]
+            if (this.filters.certainty === 'certain') {
+                certaintyCondition = `"meta-collection-type" = 'סקר רגלי'`;
+            } else {
+                certaintyCondition = `"meta-collection-type" != 'סקר רגלי'`;
+            }
         }
+        this.sql = [
+            `SELECT count(distinct "meta-tree-id") AS count FROM trees_processed WHERE ${this.focusQuery} AND ${certaintyCondition}`,
+            `SELECT "meta-collection-type" || '\n' || "meta-source-type" AS name, count(1) AS count FROM trees_processed WHERE ${this.focusQuery} AND ${certaintyCondition} GROUP BY 1 ORDER BY 2 DESC`,
+            `SELECT "attributes-genus-clean-he" AS genus_he, "attributes-genus-clean-en" AS genus_en FROM trees_processed WHERE "attributes-genus-clean-he" is not NULL AND ${this.focusQuery} AND ${certaintyCondition} GROUP BY 1, 2 ORDER BY 1`,
+        ];
         this.legend = TREE_COLOR_LEGEND;
         this.filterItems = TREE_FILTER_ITEMS;
     }
