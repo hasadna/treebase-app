@@ -1,16 +1,45 @@
 import * as Plot from '@observablehq/plot';
 
-import { State, LayerConfig, Chart, REGION_COLORING_OPTIONS, REGION_COLORING_INTERPOLATE, REGION_COLORING_LEGEND, QP_REGION_COLORING, QP_REGION_COLORING_CAR } from "./base-state";
+import { State, LayerConfig, Chart } from "./base-state";
+import { MUNIS_FILTER_ITEMS, QP_MUNI_FILTER_PD, QP_MUNI_FILTER_PD_HIGH, QP_MUNI_FILTER_PD_LOW, QP_MUNI_FILTER_PD_MID, QP_MUNI_FILTER_SEI, QP_MUNI_FILTER_SEI_HIGH, QP_MUNI_FILTER_SEI_LOW, QP_MUNI_FILTER_SEI_MID, QP_REGION_COLORING, QP_REGION_COLORING_CAR, REGION_COLORING_INTERPOLATE, REGION_COLORING_LEGEND } from './consts-regions';
 
 export class MunisState extends State {
     constructor(filters: any) {
         super('munis', undefined, filters);
+        let layerFilters: any[][] = [];
+
+        let seiCondition = 'TRUE';
+        if (this.filters[QP_MUNI_FILTER_SEI] === QP_MUNI_FILTER_SEI_HIGH) {
+            seiCondition = '(socioeconomic_index >= 8 and socioeconomic_index <= 10)';
+            layerFilters.push(['>=', ['get', 'socioeconomic_index'], 8]);
+        } else if (this.filters[QP_MUNI_FILTER_SEI] === QP_MUNI_FILTER_SEI_MID) {
+            seiCondition = '(socioeconomic_index >= 4 and socioeconomic_index <= 7)';
+            layerFilters.push(['all', ['>=', ['get', 'socioeconomic_index'], 4], ['<=', ['get', 'socioeconomic_index'], 7]]);
+        } else if (this.filters[QP_MUNI_FILTER_SEI] === QP_MUNI_FILTER_SEI_LOW) {
+            seiCondition = '(socioeconomic_index >= 1 and socioeconomic_index <= 3)';
+            layerFilters.push(['<=', ['get', 'socioeconomic_index'], 3]);
+        }
+
+        let pdCondition = 'TRUE';
+        if (this.filters[QP_MUNI_FILTER_PD] === QP_MUNI_FILTER_PD_HIGH) {
+            pdCondition = '(population_density >= 5000)';
+            layerFilters.push(['>=', ['get', 'population_density'], 5000]);
+        } else if (this.filters[QP_MUNI_FILTER_PD] === QP_MUNI_FILTER_PD_MID) {
+            pdCondition = '(population_density >= 1000 and population_density < 5000)';
+            layerFilters.push(['all', ['>=', ['get', 'population_density'], 1000], ['<', ['get', 'socioeconomic_index'], 5000]]);
+        } else if (this.filters[QP_MUNI_FILTER_PD] === QP_MUNI_FILTER_PD_LOW) {
+            pdCondition = '(population_density < 1000)';
+            layerFilters.push(['<', ['get', 'population_density'], 1000]);
+        }
+
         this.sql = [
-            `SELECT muni_name, canopy_area_ratio*100 as ratio FROM munis ORDER BY canopy_area_ratio DESC nulls last`,
+            `SELECT muni_name, canopy_area_ratio*100 as ratio, canopy_per_capita::numeric as cpc FROM munis WHERE ${seiCondition} AND ${pdCondition} ORDER BY canopy_area_ratio DESC nulls last`,
         ];
         for (const id of ['munis-label', 'munis-border', 'munis-fill']) {
             this.layerConfig[id] = new LayerConfig([
-                '>', ['get', 'canopy_area_ratio'], 0
+                'all',
+                ['>', ['get', 'canopy_area_ratio'], 0],
+                ...layerFilters
             ], null, null);
         }
         const coloring = this.filters[QP_REGION_COLORING] || QP_REGION_COLORING_CAR;
@@ -24,9 +53,7 @@ export class MunisState extends State {
             'line-opacity': 0.4
         };
         this.layerConfig['trees'] = new LayerConfig(null, null, null);
-        this.filterItems = [
-            REGION_COLORING_OPTIONS
-        ];
+        this.filterItems = MUNIS_FILTER_ITEMS;
     }
 
     override handleData(data: any[][]) {
@@ -90,6 +117,40 @@ export class MunisState extends State {
                             fill: '#204E37',
                         }),
                         Plot.ruleY([0]),
+                    ]
+                })
+            ));
+            const topCpc = data[0].filter(d => d.cpc > 0).sort((a,b) => b.cpc - a.cpc).slice(0,10);
+            console.log("TOP CPC", topCpc);
+            this.charts.push(new Chart(
+                'הרשויות עם שטח חופות העצים לנפש הגבוה ביותר:',
+                Plot.plot({
+                    height: 250,
+                    width: 340,
+                    y: {
+                        axis: null,
+                    },
+                    x: {
+                        grid: true,
+                        label: 'שטח חופות העצים לנפש במ״ר',
+                        labelAnchor: 'center',
+                    },
+                    marks: [
+                        Plot.barX(topCpc, {
+                            y: 'muni_name',
+                            x: 'cpc',
+                            fill: '#204E37',
+                            sort: {y: '-x'}
+                        }),
+                        Plot.text(topCpc, {
+                            x: 'cpc',
+                            y: 'muni_name',
+                            text: 'muni_name',
+                            textAnchor: 'start',
+                            dx: -3,
+                            fill: '#fff',
+                        }),
+                        Plot.ruleX([0]),
                     ]
                 })
             ));

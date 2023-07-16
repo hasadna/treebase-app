@@ -27,6 +27,7 @@ export class MapComponent implements AfterViewInit{
     'parcels-label',
     'parcels-border',
     'parcels-fill',
+    'roads-border',
     'canopies',
     'trees',
   ];

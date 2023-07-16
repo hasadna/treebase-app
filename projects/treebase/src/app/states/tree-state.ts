@@ -1,4 +1,5 @@
-import { State, LayerConfig, TREE_COLOR_INTERPOLATE, TREE_COLOR_LEGEND, TREE_FILTER_ITEMS } from "./base-state";
+import { State, LayerConfig } from "./base-state";
+import { TREE_COLOR_INTERPOLATE, TREE_COLOR_LEGEND, TREE_FILTER_ITEMS } from "./consts-trees";
 
 export class TreeState extends State {
     constructor(id: string, filters: any) {

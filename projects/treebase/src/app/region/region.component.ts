@@ -36,7 +36,7 @@ const ICON_INFOS: IconInfo[] = [
     text: 'שטח חופות',
     icon: 'canopy-area',
     units: (row) => row.city_code ? 'דונם' : 'קמ"ר',
-    value: (row) => (row.canopy_area / (row.city_code ? 1000 : 1000000)).toFixed(2),
+    value: (row) => (row.canopy_area / (row.city_code ? 1000 : 1000000)).toFixed(1),
   },
   {
     text: 'כיסוי חופות',
@@ -49,7 +49,7 @@ const ICON_INFOS: IconInfo[] = [
     text: 'שטח',
     icon: 'area',
     units: (row) => row.city_code ? 'דונם' : 'קמ"ר',
-    value: (row) => (row.area / (row.city_code ? 1000 : 1000000)).toFixed(2),
+    value: (row) => (row.area / (row.city_code ? 1000 : 1000000)).toFixed(1),
   },
   {
     text: 'מס׳ תושבים',

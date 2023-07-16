@@ -1,6 +1,7 @@
 import * as Plot from '@observablehq/plot';
+import { State, LayerConfig, Chart } from './base-state';
+import { QP_REGION_COLORING, QP_REGION_COLORING_CAR, REGION_COLORING_LEGEND, REGION_COLORING_INTERPOLATE, STAT_AREA_FILTER_ITEMS } from './consts-regions';
 
-import { State, LayerConfig, Chart, REGION_COLORING_OPTIONS, REGION_COLORING_INTERPOLATE, REGION_COLORING_LEGEND, QP_REGION_COLORING, QP_REGION_COLORING_CAR } from "./base-state";
 
 export class StatAreasState extends State {
     constructor(filters: any) {
@@ -25,9 +26,7 @@ export class StatAreasState extends State {
             'line-opacity': 0.4
         };
         this.layerConfig['trees'] = new LayerConfig(null, null, null);
-        this.filterItems = [
-            REGION_COLORING_OPTIONS
-        ];
+        this.filterItems = STAT_AREA_FILTER_ITEMS;
     }
 
     override handleData(data: any[][]) {

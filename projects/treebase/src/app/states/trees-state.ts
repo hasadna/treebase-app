@@ -1,6 +1,7 @@
 import * as Plot from '@observablehq/plot';
 
-import { State, LayerConfig, Chart, TREE_COLOR_INTERPOLATE, TREE_COLOR_LEGEND, CheckFilterItem, TREE_FILTER_ITEMS, SelectFilterItem, FilterOption } from "./base-state";
+import { State, LayerConfig, Chart, FilterOption, SelectFilterItem } from "./base-state";
+import { TREE_COLOR_INTERPOLATE, QP_CERTAINTY_CERTAIN, QP_CERTAINTY_SUSPECTED, TREE_COLOR_LEGEND, TREE_FILTER_ITEMS } from './consts-trees';
 
 export class TreesState extends State {
     constructor(filters: any) {
@@ -11,6 +12,9 @@ export class TreesState extends State {
         }
         if (this.filters.cadaster !== '0') {
             layers.push('cadaster-label', 'cadaster-border');
+        }
+        if (this.focus?.kind === 'road') {
+            layers.push('roads-border');
         }
         for (const id of layers) {
             this.layerConfig[id] = new LayerConfig(null, null, null);
@@ -31,15 +35,17 @@ export class TreesState extends State {
             this.layerConfig['trees'].filter = [
                 '==', ['get', 'certainty'], this.filters.certainty === 'certain'
             ]
-            if (this.filters.certainty === 'certain') {
-                certaintyCondition = `"meta-collection-type" = 'סקר רגלי'`;
+            if (this.filters.certainty === QP_CERTAINTY_CERTAIN) {
+                certaintyCondition = 'certainty = TRUE';
+            } else if (this.filters.certainty === QP_CERTAINTY_SUSPECTED) {
+                certaintyCondition = 'certainty = FALSE';
             } else {
-                certaintyCondition = `"meta-collection-type" != 'סקר רגלי'`;
+                certaintyCondition = 'TRUE';
             }
         }
         this.sql = [
-            `SELECT count(distinct "meta-tree-id") AS count FROM trees_processed WHERE ${this.focusQuery} AND ${certaintyCondition}`,
-            `SELECT "meta-collection-type" || '\n' || "meta-source-type" AS name, count(1) AS count FROM trees_processed WHERE ${this.focusQuery} AND ${certaintyCondition} GROUP BY 1 ORDER BY 2 DESC`,
+            `SELECT count(1) AS count FROM trees_compact WHERE ${this.focusQuery} AND ${certaintyCondition}`,
+            `SELECT jsonb_array_elements("joint-source-type") AS name, count(1) AS count FROM trees_compact WHERE ${this.focusQuery} AND ${certaintyCondition} GROUP BY 1 ORDER BY 2 DESC`,
             `SELECT "attributes-genus-clean-he" AS genus_he, "attributes-genus-clean-en" AS genus_en FROM trees_processed WHERE "attributes-genus-clean-he" is not NULL AND ${this.focusQuery} AND ${certaintyCondition} GROUP BY 1, 2 ORDER BY 1`,
         ];
         this.legend = TREE_COLOR_LEGEND;
@@ -75,7 +81,7 @@ export class TreesState extends State {
                             y: 'name',
                             tip: 'x',
                             title: d => `${d['count'].toLocaleString()} עצים (${(d['count'] / total * 100).toFixed(1)}%)`,
-                            text: 'name',
+                            text: d => d['name'].replace(/\//, '\n'),
                             textAnchor: 'end',
                             dx: 3,
                             fill: '#204E37',

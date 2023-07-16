@@ -13,7 +13,7 @@ export class StatAreaComponent {
   name = '';
 
   set state(state: State) {    
-    this.stat_area = state.data[0][0] || {};
+    this.stat_area = Object.assign({}, state.data[0][0] || {}, state.data[2][0] || {});
     this.sources = [];
     this.name = `אזור סטטיסטי ${this.stat_area['city_code']}/${this.stat_area['area_code'] || '0'}`
     for (const row of state.data[1]) {

@@ -104,7 +104,10 @@ export class RoadFocusMode extends FocusMode {
     }
 
     override mapFilters(): { [key: string]: any[]; } {
-        return {trees: ['==', ['to-string', ['get', 'road']], ['literal', this.code]]};
+        return {
+            trees: ['==', ['to-string', ['get', 'road']], ['literal', this.code]],
+            'roads-border': ['==', ['to-string', ['get', 'road_id']], ['literal', this.code]]
+        };
     }
 
     override boundsQuery(): string|null {

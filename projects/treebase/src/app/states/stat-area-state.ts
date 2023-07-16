@@ -1,4 +1,5 @@
-import { State, LayerConfig, REGION_COLORING_OPTIONS, REGION_COLORING_INTERPOLATE, REGION_COLORING_LEGEND, QP_REGION_COLORING, QP_REGION_COLORING_CAR } from "./base-state";
+import { State, LayerConfig } from "./base-state";
+import { QP_REGION_COLORING, QP_REGION_COLORING_CAR, REGION_COLORING_INTERPOLATE, REGION_COLORING_LEGEND, STAT_AREA_FILTER_ITEMS } from "./consts-regions";
 
 export class StatAreaState extends State {
     constructor(id: string, filters: any) {
@@ -6,6 +7,7 @@ export class StatAreaState extends State {
         this.sql = [
             `SELECT * FROM stat_areas WHERE code = '${this.id}'`,
             `SELECT "meta-source" as name, count(1) as count FROM trees_processed WHERE "stat_area_code" = '${this.id}' GROUP BY 1 order by 2 desc`,
+            `SELECT count(1) as total_count FROM trees_compact WHERE "stat_area_code" = '${this.id}'`,
         ];
         for (const id of ['stat-areas-label', 'stat-areas-border', 'stat-areas-fill']) {
             this.layerConfig[id] = new LayerConfig([
@@ -25,9 +27,7 @@ export class StatAreaState extends State {
         this.layerConfig['trees'] = new LayerConfig([
             '==', ['get', 'stat_area_code'], ['literal', this.id]
         ], null, null);
-        this.filterItems = [
-            REGION_COLORING_OPTIONS
-        ];
+        this.filterItems = STAT_AREA_FILTER_ITEMS;
     }
 
     override handleData(data: any[][]) {

@@ -1,4 +1,5 @@
-import { State, LayerConfig, REGION_COLORING_OPTIONS, REGION_COLORING_INTERPOLATE, REGION_COLORING_LEGEND, QP_REGION_COLORING, QP_REGION_COLORING_CAR } from "./base-state";
+import { State, LayerConfig} from "./base-state";
+import { MUNI_FILTER_ITEMS, QP_REGION_COLORING, QP_REGION_COLORING_CAR, REGION_COLORING_INTERPOLATE, REGION_COLORING_LEGEND } from "./consts-regions";
 
 export class MuniState extends State {
     constructor(id: string, filters: any) {
@@ -6,7 +7,7 @@ export class MuniState extends State {
         this.sql = [
             `SELECT * FROM munis WHERE "muni_code" = '${this.id}'`,
             `SELECT "meta-source" as name, count(1) as count FROM trees_processed WHERE "muni_code" = '${this.id}' GROUP BY 1 order by 2 desc`,
-            `SELECT count(distinct "meta-tree-id") as total_count FROM trees_processed WHERE "muni_code" = '${this.id}'`,
+            `SELECT count(1) as total_count FROM trees_compact WHERE "muni_code" = '${this.id}'`,
         ];
         for (const id of ['munis-label', 'munis-border', 'munis-fill']) {
             this.layerConfig[id] = new LayerConfig([
@@ -27,9 +28,7 @@ export class MuniState extends State {
             '==', ['get', 'muni'], ['literal', this.id]
         ], null, null);
         this.legend = REGION_COLORING_LEGEND[coloring];
-        this.filterItems = [
-            REGION_COLORING_OPTIONS
-        ];
+        this.filterItems = MUNI_FILTER_ITEMS;
     }
 
     override handleData(data: any[][]) {
