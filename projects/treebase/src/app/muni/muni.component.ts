@@ -11,7 +11,12 @@ export class MuniComponent {
   muni: any = null;
   sources: any[] = [];
 
-  set state(state: State) {
+  set state(state: State | null) {
+    if (state === null) {
+      this.muni = null;
+      this.sources = [];
+      return;
+    }
     this.muni = Object.assign({}, state.data[0][0] || {}, state.data[2][0] || {});
     this.sources = [];
     for (const row of state.data[1]) {

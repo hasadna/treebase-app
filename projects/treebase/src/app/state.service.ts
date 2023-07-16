@@ -15,6 +15,7 @@ import { TreesState } from './states/trees-state';
 export class StateService {
 
   state =  new ReplaySubject<State>();
+  loading =  new ReplaySubject<void>();
 
   public sidebarOpened = true;
 
@@ -53,6 +54,8 @@ export class StateService {
   }
 
   init(state: State) {
+    this.loading.next();
+    console.log('LOADING STATE');
     state.process(this.api).subscribe(() => {
       console.log('PROCESSED STATE', state);
       this.state.next(state);

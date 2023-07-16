@@ -1,5 +1,5 @@
 import { State, LayerConfig } from "./base-state";
-import { QP_REGION_COLORING, QP_REGION_COLORING_CAR, REGION_COLORING_INTERPOLATE, REGION_COLORING_LEGEND, STAT_AREA_FILTER_ITEMS } from "./consts-regions";
+import { QP_REGION_COLORING, QP_REGION_COLORING_CAR, QP_REGION_COLORING_CPC, REGION_COLORING_INTERPOLATE, REGION_COLORING_LEGEND, STAT_AREA_FILTER_ITEMS } from "./consts-regions";
 
 export class StatAreaState extends State {
     constructor(id: string, filters: any) {
@@ -14,7 +14,10 @@ export class StatAreaState extends State {
                 '==', ['get', 'code'], ['literal', this.id]
             ], null, null);
         }
-        const coloring = this.filters[QP_REGION_COLORING] || QP_REGION_COLORING_CAR;
+        let coloring = this.filters[QP_REGION_COLORING] || QP_REGION_COLORING_CAR;
+        if (coloring === QP_REGION_COLORING_CPC) {
+            coloring = QP_REGION_COLORING_CAR;
+        }
         this.legend = REGION_COLORING_LEGEND[coloring];
         this.layerConfig['stat-areas-fill'].paint = {
             'fill-color': REGION_COLORING_INTERPOLATE[coloring],

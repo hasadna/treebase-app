@@ -1,6 +1,11 @@
 <div class='sidebar'>
     <div class='close' *ngIf='!!back'><a [routerLink]='back'  queryParamsHandling='merge'></a></div>
     <ng-content *ngIf='init'></ng-content>
+    <ng-container *ngIf='!init'>
+        <div class='loading small'></div>
+        <div class='loading large'></div>
+        <div class='loading large'></div>
+    </ng-container>
 </div>
 <div class='window' [class.interactive]='!!back' (click)='goBack()'>
     <div class='handle' *ngIf='!back' [class.opened]='stateSvc.sidebarOpened' (click)='stateSvc.sidebarOpened = !stateSvc.sidebarOpened'></div>

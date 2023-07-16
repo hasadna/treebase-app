@@ -14,19 +14,16 @@ import { Router } from '@angular/router';
     '[class.opened]': 'stateSvc.sidebarOpened || !!back',
   }
 })
-export class ContentComponent implements OnInit{
+export class ContentComponent {
 
   @Input() init = false;
   @Input() mode: StateMode = 'empty';
   @Input() back: string[] | null = null;
-  @Output() state = new EventEmitter<State>();
+  @Output() state = new EventEmitter<State | null>();
   
   state_: State;
 
   constructor(public stateSvc: StateService, private router: Router) {
-  }
-
-  ngOnInit() {
     this.stateSvc.state.pipe(
       untilDestroyed(this),
       filter((state) => state.mode === this.mode),
@@ -34,6 +31,11 @@ export class ContentComponent implements OnInit{
     ).subscribe((state) => {
       this.state_ = state;
       this.state.emit(state);
+    });
+    this.stateSvc.loading.pipe(
+      untilDestroyed(this),
+    ).subscribe(() => {
+      this.state.emit(null);
     });
   }
 

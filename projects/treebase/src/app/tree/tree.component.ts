@@ -19,7 +19,12 @@ export class TreeComponent {
   constructor(private sanitizer: DomSanitizer) {
   }
 
-  set state(state: State) {
+  set state(state: State | null) {
+    if (state === null) {
+      this.tree = null;
+      this.sources = [];
+      return;
+    }
     console.log('GOTT STATE', state);
     this.sources = [];
     this.tree = {};

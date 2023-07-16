@@ -6,11 +6,17 @@ export const QP_REGION_COLORING_QUALITY = 'quality';
 export const QP_REGION_COLORING_CPC = 'cpc';
 
 // Region Colorings
-export const REGION_COLORING_OPTIONS = new SelectFilterItem(
+export const MUNI_COLORING_OPTIONS = new SelectFilterItem(
     QP_REGION_COLORING, 'תצוגת אזורים:', [
         new FilterOption(QP_REGION_COLORING_CAR, 'לפי כיסוי חופות העצים'),
         new FilterOption(QP_REGION_COLORING_QUALITY, 'לפי איכות המידע'),
         new FilterOption(QP_REGION_COLORING_CPC, 'לפי שטח כיסוי צומח לנפש'),
+    ]
+);
+export const STAT_AREA_COLORING_OPTIONS = new SelectFilterItem(
+    QP_REGION_COLORING, 'תצוגת אזורים:', [
+        new FilterOption(QP_REGION_COLORING_CAR, 'לפי כיסוי חופות העצים'),
+        new FilterOption(QP_REGION_COLORING_QUALITY, 'לפי איכות המידע'),
     ]
 );
 export const REGION_COLORING_INTERPOLATE: {[key: string]: any[]} = {};
@@ -73,7 +79,7 @@ export const QP_MUNI_FILTER_PD_HIGH = 'high';
 export const QP_MUNI_FILTER_PD_ALL = 'all';
 
 export const MUNIS_FILTER_ITEMS = [
-    REGION_COLORING_OPTIONS,
+    MUNI_COLORING_OPTIONS,
     new SelectFilterItem(
         QP_MUNI_FILTER_SEI, 'לפי אשכול חברתי-כלכלי:', [
             new FilterOption(QP_MUNI_FILTER_SEI_ALL, 'כל האשכולות'),
@@ -93,9 +99,9 @@ export const MUNIS_FILTER_ITEMS = [
 ];
 
 export const MUNI_FILTER_ITEMS = [
-    REGION_COLORING_OPTIONS
+    MUNI_COLORING_OPTIONS
 ];
 
 export const STAT_AREA_FILTER_ITEMS = [
-    REGION_COLORING_OPTIONS
+    STAT_AREA_COLORING_OPTIONS
 ];

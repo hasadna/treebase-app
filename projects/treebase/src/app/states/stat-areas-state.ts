@@ -1,6 +1,6 @@
 import * as Plot from '@observablehq/plot';
 import { State, LayerConfig, Chart } from './base-state';
-import { QP_REGION_COLORING, QP_REGION_COLORING_CAR, REGION_COLORING_LEGEND, REGION_COLORING_INTERPOLATE, STAT_AREA_FILTER_ITEMS } from './consts-regions';
+import { QP_REGION_COLORING, QP_REGION_COLORING_CAR, REGION_COLORING_LEGEND, REGION_COLORING_INTERPOLATE, STAT_AREA_FILTER_ITEMS, QP_REGION_COLORING_CPC } from './consts-regions';
 
 
 export class StatAreasState extends State {
@@ -15,7 +15,10 @@ export class StatAreasState extends State {
             ], null, null);
         }
         this.layerConfig['munis-label'] = new LayerConfig(null, null, null);
-        const coloring = this.filters[QP_REGION_COLORING] || QP_REGION_COLORING_CAR;
+        let coloring = this.filters[QP_REGION_COLORING] || QP_REGION_COLORING_CAR;
+        if (coloring === QP_REGION_COLORING_CPC) {
+            coloring = QP_REGION_COLORING_CAR;
+        }
         this.legend = REGION_COLORING_LEGEND[coloring];
         this.layerConfig['stat-areas-fill'].paint = {
             'fill-color': REGION_COLORING_INTERPOLATE[coloring],
