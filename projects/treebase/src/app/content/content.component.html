@@ -3,6 +3,7 @@
     <ng-content *ngIf='init'></ng-content>
 </div>
 <div class='window' [class.interactive]='!!back' (click)='goBack()'>
+    <div class='handle' *ngIf='!back' [class.opened]='stateSvc.sidebarOpened' (click)='stateSvc.sidebarOpened = !stateSvc.sidebarOpened'></div>
     <div class='widgets'>
         <div class='column'>
             <app-search></app-search>

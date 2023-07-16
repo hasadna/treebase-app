@@ -16,6 +16,8 @@ export class StateService {
 
   state =  new ReplaySubject<State>();
 
+  public sidebarOpened = true;
+
   constructor(private api: ApiService) { }
 
   initFromUrl(segments: any[], queryParams: any) {
@@ -56,4 +58,5 @@ export class StateService {
       this.state.next(state);
     });
   }
+
 }

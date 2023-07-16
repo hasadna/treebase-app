@@ -9,7 +9,10 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-content',
   templateUrl: './content.component.html',
-  styleUrls: ['./content.component.less']
+  styleUrls: ['./content.component.less'],
+  host: {
+    '[class.opened]': 'stateSvc.sidebarOpened || !!back',
+  }
 })
 export class ContentComponent implements OnInit{
 
@@ -20,7 +23,7 @@ export class ContentComponent implements OnInit{
   
   state_: State;
 
-  constructor(private stateSvc: StateService, private router: Router) {
+  constructor(public stateSvc: StateService, private router: Router) {
   }
 
   ngOnInit() {
