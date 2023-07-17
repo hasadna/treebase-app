@@ -28,6 +28,12 @@
             "inlineStyleLanguage": "less",
             "assets": [
               "projects/treebase/src/favicon.ico",
+              "projects/treebase/src/favicon-16x16.png",
+              "projects/treebase/src/favicon-32x32.png",
+              "projects/treebase/src/apple-touch-icon.png",
+              "projects/treebase/src/android-chrome-192x192.png",
+              "projects/treebase/src/android-chrome-512x512.png",
+              "projects/treebase/src/site.webmanifest",
               "projects/treebase/src/assets"
             ],
             "styles": [
