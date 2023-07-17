@@ -25,7 +25,7 @@ export class SearchComponent {
     this.terms.pipe(
       untilDestroyed(this),
       distinctUntilChanged(),
-      debounceTime(2000),
+      debounceTime(700),
       switchMap(term => {
         this.results = [];
         return this.api.search(term);
