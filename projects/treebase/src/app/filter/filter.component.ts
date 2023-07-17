@@ -16,6 +16,7 @@ export class FilterComponent {
   filters: any = {};
   _selected: any = {};
   _checked: any = {};
+  downloadQuery: string | null = null;
 
   constructor(public stateSvc: StateService, private router: Router) {
     this.stateSvc.state.pipe(
@@ -43,6 +44,7 @@ export class FilterComponent {
     this.controls.filter(control => control.kind === 'check').forEach(control => {
       this._checked[control.id] = this.filters[control.id] !== '0';
     });
+    this.downloadQuery = state.downloadQuery;
   }
 
   updateCheck(id: string, element: EventTarget | null) {

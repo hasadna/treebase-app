@@ -109,7 +109,7 @@ export class MapComponent implements AfterViewInit{
           this.map.flyTo({
             center: state.geo.center,
             zoom: state.geo.zoom,
-            padding: {top:0, bottom:0, left:0, right: 400}
+            // padding: {top:0, bottom:0, left:0, right: 400}
           });
         }
         console.log('STATE', state, this.map.getStyle().layers);
@@ -119,7 +119,10 @@ export class MapComponent implements AfterViewInit{
             const QUERY = state.focus.boundsQuery();
             if (QUERY) {
               this.api.query(QUERY).subscribe((res) => {
-                this.map.fitBounds(res[0].bounds, {padding: {top:0, bottom:0, left:0, right: 400}});
+                this.map.fitBounds(
+                  res[0].bounds,
+                  // {padding: {top:0, bottom:0, left:0, right: 400}}
+                );
               });
             }
           }
@@ -163,7 +166,8 @@ export class MapComponent implements AfterViewInit{
             }
           }
         });
-      });  
+      });
+      this.mapboxService.map = this.map;
     });
   }
 

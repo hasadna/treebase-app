@@ -42,6 +42,12 @@ export class ApiService {
       );
   }
 
+  downloadUrl(filename: string) {
+    return 'https://api.digital-forest.org.il/api/download?' +
+      'format=xlsx' +
+      '&filename=' + encodeURIComponent(filename);
+  }
+
   search(term: string): Observable<SearchResult[]> {
     const queries = [];
     for (const config of SEARCH_CONFIG) {

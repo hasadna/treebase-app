@@ -1,1 +1,7 @@
-<button [matTooltip]='"ייצוא רשימת העצים המופיעה בתצוגת מפה זו לקובץ אקסל"'></button>
+<form class='download' [action]='downloadUrl()' method='post' name='download' ngNoForm target='_blank'>
+    <input type='hidden' name='query' [value]='downloadQuery()'>
+    <input type='hidden' name='headers' [value]='headers'>
+    <button type='submit' [matTooltip]='"ייצוא פרטי העצים המופיעים בתצוגת מפה זו לקובץ אקסל (עד 50,000 עצים)"'></button>
+</form>
+
+

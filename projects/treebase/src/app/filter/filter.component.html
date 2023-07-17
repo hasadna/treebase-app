@@ -22,7 +22,7 @@
         </div>
     </div>
     <div class='last'>
-        <app-export></app-export>
+        <app-export *ngIf='!!downloadQuery' [query]='downloadQuery || ""'></app-export>
         <app-share></app-share>
     </div>
 </div>

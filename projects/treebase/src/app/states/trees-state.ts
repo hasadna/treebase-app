@@ -39,8 +39,6 @@ export class TreesState extends State {
                 certaintyCondition = 'certainty = TRUE';
             } else if (this.filters.certainty === QP_CERTAINTY_SUSPECTED) {
                 certaintyCondition = 'certainty = FALSE';
-            } else {
-                certaintyCondition = 'TRUE';
             }
         }
         this.sql = [
@@ -50,6 +48,8 @@ export class TreesState extends State {
         ];
         this.legend = TREE_COLOR_LEGEND;
         this.filterItems = TREE_FILTER_ITEMS;
+        this.downloadQuery = `SELECT __fields__ FROM trees_processed WHERE "meta-tree-id" in (
+            SELECT "meta-tree-id" FROM trees_compact WHERE ${this.focusQuery} AND ${certaintyCondition}) AND __geo__ ORDER BY "meta-tree-id" LIMIT 50000`;
     }
 
     override handleData(data: any[][]) {

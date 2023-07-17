@@ -51,6 +51,7 @@ export class State {
 
     data: any[][];
     sql: string[] = [];
+    downloadQuery: string | null = null;
     geo: {
         zoom: number;
         center: [number, number];

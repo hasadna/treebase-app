@@ -9,6 +9,7 @@ export class MapboxService {
 
   ACCESS_TOKEN = 'pk.eyJ1IjoidHJlZWJhc2UiLCJhIjoiY2xjazVueWFnMHBscDN2bXRkdjh1dHd1cyJ9.zcn36ZZJ9b0RJlYJTSZYOA';
   public init = new ReplaySubject<void>(1);
+  public map: mapboxgl.Map;
 
   constructor() {
     console.log('MAPBOX SERVICE ACCESS TOKEN', this.ACCESS_TOKEN);
