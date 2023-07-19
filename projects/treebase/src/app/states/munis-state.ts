@@ -121,7 +121,6 @@ export class MunisState extends State {
                 })
             ));
             const topCpc = data[0].filter(d => d.cpc > 0).sort((a,b) => b.cpc - a.cpc).slice(0,10);
-            console.log("TOP CPC", topCpc);
             this.charts.push(new Chart(
                 'הרשויות עם שטח חופות העצים לנפש הגבוה ביותר:',
                 Plot.plot({

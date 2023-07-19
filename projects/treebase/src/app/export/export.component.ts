@@ -145,7 +145,6 @@ export class ExportComponent {
     const boundsCondition = `"location-x" > ${bounds.getWest()} AND "location-x" < ${bounds.getEast()} AND "location-y" > ${bounds.getSouth()} AND "location-y" < ${bounds.getNorth()}`;
     let query = this.query.replace(/__fields__/g, this.fields);
     query = query.replace(/__geo__/g, boundsCondition);
-    console.log('DOWNLOAD QUERY', query);
     return query;
   }
 

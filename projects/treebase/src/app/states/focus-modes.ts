@@ -45,7 +45,6 @@ export class FocusMode {
 
 export class MuniFocusMode extends FocusMode {
     constructor(code: string, name: string) {
-        console.log('DDDDD', code, name);
         super('muni', 'רשות מקומית', code, name);
     }
 

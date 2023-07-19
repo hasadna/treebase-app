@@ -25,7 +25,6 @@ export class TreeComponent {
       this.sources = [];
       return;
     }
-    console.log('GOTT STATE', state);
     this.sources = [];
     this.tree = {};
     for (const row of state.data[0]) {
