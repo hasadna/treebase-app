@@ -14,7 +14,7 @@
         </div>
     </div>
     <div class='sources section'>
-        <h2>רשימת מקורות המידע</h2>
+        <h2 [matTooltip]='"מספר עצים לכל מקור מידע ללא הצלבה למקורות מידע אחרים"'>רשימת מקורות המידע</h2>
         <div class='info' *ngFor='let source of sources'>
             <span>{{source.name}}</span>
             <span><strong>{{source.count.toLocaleString()}}</strong> עצים</span>
