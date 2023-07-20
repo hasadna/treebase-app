@@ -11,7 +11,7 @@ type IconInfo = {
 
 const ICON_INFOS: IconInfo[] = [
   {
-    text: 'כמות עצים',
+    text: 'מספר עצים',
     icon: 'tree-count',
     field: 'total_count',
     units: '',
