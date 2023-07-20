@@ -45,7 +45,7 @@ export class TreesState extends State {
         this.sql = [
             `SELECT count(1) AS count FROM trees_compact WHERE ${this.focusQuery} AND ${certaintyCondition}`,
             `SELECT jsonb_array_elements("joint-source-type") AS name, count(1) AS count FROM trees_compact WHERE ${this.focusQuery} AND ${certaintyCondition} GROUP BY 1 ORDER BY 2 DESC`,
-            `SELECT "attributes-genus-clean-he" AS genus_he, "attributes-genus-clean-en" AS genus_en FROM trees_processed WHERE "attributes-genus-clean-he" is not NULL AND ${this.focusQuery} AND ${certaintyCondition} GROUP BY 1, 2 ORDER BY 1`,
+            `SELECT "attributes-species-clean-he" AS species_he, "attributes-species-clean-en" AS species_en FROM trees_processed WHERE "attributes-species-clean-he" is not NULL AND ${this.focusQuery} AND ${certaintyCondition} GROUP BY 1, 2 ORDER BY 1`,
         ];
         this.legend = TREE_COLOR_LEGEND;
         this.filterItems = TREE_FILTER_ITEMS;
@@ -94,10 +94,10 @@ export class TreesState extends State {
         }
         if (data[2].length) {
             this.filterItems = [...this.filterItems, new SelectFilterItem(
-                'genus',
+                'species',
                 'סינון לפי מין העץ...',
                 [new FilterOption('all', 'כל המינים'),
-                 ...data[2].map((d: any) => new FilterOption(d['genus_en'], d['genus_he']))]
+                 ...data[2].map((d: any) => new FilterOption(d['species_en'], d['species_he']))]
             )];
         }
     }
