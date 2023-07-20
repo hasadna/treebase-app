@@ -31,6 +31,7 @@ export class TreesState extends State {
             'circle-stroke-color': '#ffffff',
         };
         let certaintyCondition = 'TRUE';
+        this.filters.certainty = this.filters.certainty || 'all';
         if (this.filters.certainty !== 'all') {
             this.layerConfig['trees'].filter = [
                 '==', ['get', 'certainty'], this.filters.certainty === 'certain'

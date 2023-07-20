@@ -91,9 +91,9 @@ export const MUNIS_FILTER_ITEMS = [
     new SelectFilterItem(
         QP_MUNI_FILTER_PD, 'לפי צפיפות אוכלוסיה:', [
             new FilterOption(QP_MUNI_FILTER_PD_ALL, 'הכל'),
-            new FilterOption(QP_MUNI_FILTER_PD_LOW, '<1000 נפשות למ״ר'),
-            new FilterOption(QP_MUNI_FILTER_PD_MID, '1000-5000 נפשות למ״ר'),
-            new FilterOption(QP_MUNI_FILTER_PD_HIGH, '>5000 נפשות למ״ר'),
+            new FilterOption(QP_MUNI_FILTER_PD_LOW, '<1000 נפשות לקמ״ר'),
+            new FilterOption(QP_MUNI_FILTER_PD_MID, '1000-5000 נפשות לקמ״ר'),
+            new FilterOption(QP_MUNI_FILTER_PD_HIGH, '>5000 נפשות לקמ״ר'),
         ]
     )
 ];
