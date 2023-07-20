@@ -7,14 +7,14 @@ export const QP_REGION_COLORING_CPC = 'cpc';
 
 // Region Colorings
 export const MUNI_COLORING_OPTIONS = new SelectFilterItem(
-    QP_REGION_COLORING, 'תצוגת אזורים:', [
+    QP_REGION_COLORING, 'הצגה:', [
         new FilterOption(QP_REGION_COLORING_CAR, 'לפי כיסוי חופות העצים'),
         new FilterOption(QP_REGION_COLORING_QUALITY, 'לפי איכות המידע'),
         new FilterOption(QP_REGION_COLORING_CPC, 'לפי שטח כיסוי צומח לנפש'),
     ]
 );
 export const STAT_AREA_COLORING_OPTIONS = new SelectFilterItem(
-    QP_REGION_COLORING, 'תצוגת אזורים:', [
+    QP_REGION_COLORING, 'הצגה:', [
         new FilterOption(QP_REGION_COLORING_CAR, 'לפי כיסוי חופות העצים'),
         new FilterOption(QP_REGION_COLORING_QUALITY, 'לפי איכות המידע'),
     ]
