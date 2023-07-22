@@ -31,20 +31,29 @@ export class TreesState extends State {
             'circle-stroke-color': '#ffffff',
         };
         let certaintyCondition = 'TRUE';
+        this.layerConfig['trees'].filter = [];
         this.filters.certainty = this.filters.certainty || 'all';
         if (this.filters.certainty !== 'all') {
-            this.layerConfig['trees'].filter = [
-                '==', ['get', 'certainty'], this.filters.certainty === 'certain'
-            ]
+            this.layerConfig['trees'].filter.push(
+                ['==', ['get', 'certainty'], this.filters.certainty === 'certain']
+            );
             if (this.filters.certainty === QP_CERTAINTY_CERTAIN) {
                 certaintyCondition = 'certainty = TRUE';
             } else if (this.filters.certainty === QP_CERTAINTY_SUSPECTED) {
                 certaintyCondition = 'certainty = FALSE';
             }
         }
+        let speciesQuery = 'TRUE';
+        this.filters.species = this.filters.species || 'all';
+        if (this.filters.species !== 'all') {
+            speciesQuery = `"attributes-species-clean-en" = '${this.filters.species}'`;
+            this.layerConfig['trees'].filter.push(
+                ['==', ['get', 'species_en'], this.filters.species]
+            );
+        }
         this.sql = [
-            `SELECT count(1) AS count FROM trees_compact WHERE ${this.focusQuery} AND ${certaintyCondition}`,
-            `SELECT jsonb_array_elements("joint-source-type") AS name, count(1) AS count FROM trees_compact WHERE ${this.focusQuery} AND ${certaintyCondition} GROUP BY 1 ORDER BY 2 DESC`,
+            `SELECT count(1) AS count FROM trees_compact WHERE ${this.focusQuery} AND ${certaintyCondition} AND ${speciesQuery}`,
+            `SELECT jsonb_array_elements("joint-source-type") AS name, count(1) AS count FROM trees_compact WHERE ${this.focusQuery} AND ${certaintyCondition} AND ${speciesQuery} GROUP BY 1 ORDER BY 2 DESC`,
             `SELECT "attributes-species-clean-he" AS species_he, "attributes-species-clean-en" AS species_en FROM trees_processed WHERE "attributes-species-clean-he" is not NULL AND ${this.focusQuery} AND ${certaintyCondition} GROUP BY 1, 2 ORDER BY 1`,
         ];
         this.legend = TREE_COLOR_LEGEND;
