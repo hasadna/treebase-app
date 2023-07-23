@@ -48,18 +48,25 @@ export class TreesState extends State {
         if (this.filters.species !== 'all') {
             speciesQuery = `"attributes-species-clean-en" = '${this.filters.species}'`;
             this.layerConfig['trees'].filter.push(
-                ['==', ['get', 'species_en'], this.filters.species]
+                ['==', ['get', 'species_en'], ["literal", this.filters.species]]
             );
         }
         this.sql = [
             `SELECT count(1) AS count FROM trees_compact WHERE ${this.focusQuery} AND ${certaintyCondition} AND ${speciesQuery}`,
             `SELECT jsonb_array_elements("joint-source-type") AS name, count(1) AS count FROM trees_compact WHERE ${this.focusQuery} AND ${certaintyCondition} AND ${speciesQuery} GROUP BY 1 ORDER BY 2 DESC`,
-            `SELECT "attributes-species-clean-he" AS species_he, "attributes-species-clean-en" AS species_en FROM trees_processed WHERE "attributes-species-clean-he" is not NULL AND ${this.focusQuery} AND ${certaintyCondition} GROUP BY 1, 2 ORDER BY 1`,
+            `SELECT "attributes-species-clean-he" AS species_he, "attributes-species-clean-en" AS species_en FROM trees_compact WHERE "attributes-species-clean-he" is not NULL AND ${this.focusQuery} AND ${certaintyCondition} GROUP BY 1, 2 ORDER BY 1`,
         ];
         this.legend = TREE_COLOR_LEGEND;
         this.filterItems = TREE_FILTER_ITEMS;
         this.downloadQuery = `SELECT __fields__ FROM trees_processed WHERE "meta-tree-id" in (
             SELECT "meta-tree-id" FROM trees_compact WHERE ${this.focusQuery} AND ${certaintyCondition}) AND __geo__ ORDER BY "meta-tree-id" LIMIT 50000`;
+        if (this.layerConfig['trees'].filter.length > 1) {
+            this.layerConfig['trees'].filter = ['all', ...this.layerConfig['trees'].filter];
+        } else if (this.layerConfig['trees'].filter.length === 1) {
+            this.layerConfig['trees'].filter = this.layerConfig['trees'].filter[0];
+        } else {
+            this.layerConfig['trees'].filter = null;
+        }
     }
 
     override handleData(data: any[][]) {
