@@ -149,7 +149,8 @@ export class ExportComponent {
   }
 
   downloadUrl() {
-    return this.api.downloadUrl('download.xlsx');
+    const filename = 'tree-base-download-' + (new Date().toISOString().slice(0, 10));
+    return this.api.downloadUrl(filename);
   }
 
 }
