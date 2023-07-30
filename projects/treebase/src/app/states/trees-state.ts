@@ -1,14 +1,22 @@
 import * as Plot from '@observablehq/plot';
 
 import { State, LayerConfig, Chart, FilterOption, SelectFilterItem } from "./base-state";
-import { TREE_COLOR_INTERPOLATE, QP_CERTAINTY_CERTAIN, QP_CERTAINTY_SUSPECTED, TREE_COLOR_LEGEND, TREE_FILTER_ITEMS } from './consts-trees';
+import { TREE_COLOR_INTERPOLATE, QP_CERTAINTY_CERTAIN, QP_CERTAINTY_SUSPECTED, TREE_COLOR_LEGEND, TREE_FILTER_ITEMS, QP_CANOPIES, QP_CANOPIES_NONE, QP_CANOPIES_MATCHED, QP_CANOPIES_LIKELY, QP_CANOPIES_MATCHED_LIKELY } from './consts-trees';
 
 export class TreesState extends State {
     constructor(filters: any) {
         super('trees', undefined, filters);    
         const layers = ['trees'];
-        if (this.filters.canopies !== '0') {
+        let canopiesFilter: any[] | null = null;
+        if (this.filters[QP_CANOPIES] !== QP_CANOPIES_NONE) {
             layers.push('canopies');
+            if (this.filters[QP_CANOPIES] === QP_CANOPIES_MATCHED) {
+                canopiesFilter = ['==', ['get', 'kind'], ['literal', 'matched']];
+            } else if (this.filters[QP_CANOPIES] === QP_CANOPIES_LIKELY) {
+                canopiesFilter = ['==', ['get', 'kind'], ['literal', 'likely']];
+            } else if (this.filters[QP_CANOPIES] === QP_CANOPIES_MATCHED_LIKELY) {
+                canopiesFilter = ['!=', ['get', 'kind'], ['literal', 'unknown']];
+            }
         }
         if (this.filters.cadaster !== '0') {
             layers.push('cadaster-label', 'cadaster-border');
@@ -18,6 +26,9 @@ export class TreesState extends State {
         }
         for (const id of layers) {
             this.layerConfig[id] = new LayerConfig(null, null, null);
+        }
+        if (canopiesFilter) {
+            this.layerConfig['canopies'].filter = canopiesFilter;
         }
         this.layerConfig['trees'].paint = {
             'circle-color': TREE_COLOR_INTERPOLATE,
