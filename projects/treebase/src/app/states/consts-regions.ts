@@ -10,7 +10,7 @@ export const MUNI_COLORING_OPTIONS = new SelectFilterItem(
     QP_REGION_COLORING, 'הצגה:', [
         new FilterOption(QP_REGION_COLORING_CAR, 'לפי כיסוי חופות העצים'),
         new FilterOption(QP_REGION_COLORING_QUALITY, 'לפי איכות המידע'),
-        new FilterOption(QP_REGION_COLORING_CPC, 'לפי שטח כיסוי צומח לנפש'),
+        new FilterOption(QP_REGION_COLORING_CPC, 'לפי שטח חופות עצים לנפש'),
     ]
 );
 export const STAT_AREA_COLORING_OPTIONS = new SelectFilterItem(
@@ -56,7 +56,7 @@ REGION_COLORING_LEGEND[QP_REGION_COLORING_CAR] = new Legend('מקרא כיסוי
     new LegendItem('#acecc2', 'כיסוי נמוך'),
     new LegendItem('#ccc', 'אין מידע', true),
 ], 'לפי מיפוי חופות עצים של מפ״י');
-REGION_COLORING_LEGEND[QP_REGION_COLORING_CPC] = new Legend('מקרא שטח כיסוי צומח לנפש', [
+REGION_COLORING_LEGEND[QP_REGION_COLORING_CPC] = new Legend('מקרא שטח חופות עצים לנפש', [
     new LegendItem('#155b2e', 'כיסוי גבוה'),
     new LegendItem('#3b7f53', ''),
     new LegendItem('#60a478', '↑', false, true),

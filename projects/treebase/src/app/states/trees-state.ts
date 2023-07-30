@@ -71,6 +71,14 @@ export class TreesState extends State {
 
     override handleData(data: any[][]) {
         this.charts = [];
+
+        const RENAME: any = {
+            'חישה מרחוק/ממשלתי':
+                    'עיבוד חופות עצים/(חישה מרחוק, מפ"י)',
+            'סקר רגלי/ממשלתי':
+                    'רשות המים/(נתוני רשויות מעובדים)'
+        };
+
         if (data[1].length) {
             const total = data[0][0]['count'];
             const sources = data[1];
@@ -79,7 +87,7 @@ export class TreesState extends State {
                 Plot.plot({
                     height: 250,
                     width: 340,
-                    marginRight: 80,
+                    marginRight: 100,
                     y: {
                         axis: null,
                     },
@@ -98,7 +106,7 @@ export class TreesState extends State {
                             y: 'name',
                             tip: 'x',
                             title: d => `${d['count'].toLocaleString()} עצים (${(d['count'] / total * 100).toFixed(1)}%)`,
-                            text: d => d['name'].replace(/\//, '\n'),
+                            text: d => (RENAME[d['name']] || d['name']).replace(/\//, '\n'),
                             textAnchor: 'end',
                             dx: 3,
                             fill: '#204E37',
