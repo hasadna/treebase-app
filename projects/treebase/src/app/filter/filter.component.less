@@ -4,7 +4,7 @@
 
 .filter {
     width: 100%;
-    height: 80px;
+    min-height: 80px;
     padding: 20px;
     display: flex;
     align-items: center;
@@ -15,6 +15,7 @@
     z-index: 2;
 
     .selector {
+        flex: 0 0 auto;
         height: 40px;
         border-radius: 20px;
         border: 1px solid @color-green;
@@ -78,10 +79,12 @@
 
     .controls {
         display: flex;
+        flex-flow: row wrap;
         align-items: center;
         justify-content: flex-start;
-        gap: 30px;    
+        gap: 18px 30px;
         .control {
+            flex: 0 0 auto;
             .check {
                 display: flex;
                 align-items: center;
@@ -120,6 +123,7 @@
                     .font-regular;
                     font-size: 16px;
                     line-height: 24px;
+                    white-space: nowrap;
                 }
             }
             .select {
@@ -132,6 +136,7 @@
                     margin: 0;
                     color: @color-midgrey;
                     margin-top: -16px;
+                    white-space: nowrap;
                 }
                 select {
                     border-radius: 5px;
@@ -147,6 +152,7 @@
         }
     }
     .last {
+        flex: 0 0 auto;
         margin-right: auto;
         display: flex;
         align-items: center;
