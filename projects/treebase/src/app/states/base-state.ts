@@ -27,6 +27,7 @@ export class FilterOption {
 
 export class FilterItem {
     label: string;
+    placeholder: string = '';
     options: FilterOption[] = [];
 
     constructor(public id: string, public kind: string) {}
@@ -44,6 +45,14 @@ export class SelectFilterItem extends FilterItem {
         super(id, 'select');
         this.label = label;
         this.options = options;
+    }
+}
+export class MultipleSelectFilterItem extends FilterItem {
+    constructor(id: string, label: string, placeholder: string, options: FilterOption[]) {
+        super(id, 'multi-select');
+        this.label = label;
+        this.options = options;
+        this.placeholder = placeholder;
     }
 }
 

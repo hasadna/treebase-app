@@ -77,12 +77,15 @@ export class RegionComponent implements OnChanges {
   @Input() record: any = null;
   @Input() sources: any[] = [];
   @Input() name: string = '';
+  @Input() focus: string = '';
+  @Input() focusLink: string = '';
 
   iconInfos: IconInfo[] = [];
+  focusParams: any = {};
 
   ngOnChanges(): void {
     if (this.record) {
-      console.log('REGION RECORD', this.record);
+        console.log('REGION RECORD', this.record);
       this.iconInfos = [];
       ICON_INFOS.forEach((iconInfo) => {
         let value: any | null = null;
@@ -108,6 +111,9 @@ export class RegionComponent implements OnChanges {
         }
       });
       console.log('REGION ICON_INFOS', this.iconInfos);
+      this.focusParams = {
+        focus: this.focus,
+      };
     }
       
   }

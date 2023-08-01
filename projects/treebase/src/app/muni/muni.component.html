@@ -1,3 +1,5 @@
 <app-content mode='muni' [init]='!!muni' [back]='["/", "munis"]' (state)='state = $event'>
-    <app-region  *ngIf='muni' [record]='muni' [sources]='sources' [name]='muni["muni_name"]'></app-region>
+    <app-region  *ngIf='muni' [record]='muni' [sources]='sources' [name]='muni["muni_name"]'
+                [focus]='"muni:" + muni["muni_code"] + ":" + muni["muni_name"]' [focusLink]='muni["muni_name"]'
+                ></app-region>
 </app-content>

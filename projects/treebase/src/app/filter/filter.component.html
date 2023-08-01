@@ -19,6 +19,24 @@
                     >{{ option.label }}</option>
                 </select>
             </div>
+            <div class='select' *ngIf='control.kind === "multi-select"'>
+                <label [for]='control.id'>{{ control.label }}</label>
+                <select [id]='control.id' (change)='toggleValue(control.id, $event)'>
+                    <option disabled selected *ngIf="_selected[control.id].length === 0" value=''>{{control.placeholder}}</option>
+                    <option disabled selected *ngIf="_selected[control.id].length > 0" value=''>{{_selected[control.id].length}} נבחר(ו)</option>
+                    <ng-container *ngFor='let option of control.options'>
+                        <option *ngIf='_selected[control.id] && _selected[control.id].includes(option.value)'
+                                [value]='option.value'
+                        ><strong>- {{ option.label }}</strong></option>
+                    </ng-container>
+                    <option disabled *ngIf="_selected[control.id]" value=''>---</option>
+                    <ng-container *ngFor='let option of control.options'>
+                        <option *ngIf='!_selected[control.id] || !_selected[control.id].includes(option.value)'
+                                [value]='option.value'
+                        >+ {{ option.label }}</option>
+                    </ng-container>                
+                </select>
+            </div>
         </div>
     </div>
     <div class='last'>

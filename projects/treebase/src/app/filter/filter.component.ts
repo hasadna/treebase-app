@@ -41,6 +41,9 @@ export class FilterComponent {
     this.controls.filter(control => control.kind === 'select').forEach(control => {
       this._selected[control.id] = this.filters[control.id] || control.options[0].value;
     });
+    this.controls.filter(control => control.kind === 'multi-select').forEach(control => {
+      this._selected[control.id] = this.filters[control.id] || [];
+    });    
     this.controls.filter(control => control.kind === 'check').forEach(control => {
       this._checked[control.id] = this.filters[control.id] !== '0';
     });
@@ -66,6 +69,23 @@ export class FilterComponent {
     this._selected[id] = value;
     const queryParams: any = {};
     queryParams[id] = value;
+    this.router.navigate([], {
+      queryParams,
+      replaceUrl: true,
+      queryParamsHandling: 'merge',
+    });
+  }
+
+  toggleValue(id: string, event: Event) {
+    const value = (event.target as HTMLSelectElement).value;
+    this._selected[id] = this._selected[id] || [];
+    if (this._selected[id].indexOf(value) >= 0) {
+      this._selected[id] = this._selected[id].filter((v: string) => v !== value);
+    } else {
+      this._selected[id].push(value);
+    }
+    const queryParams: any = {};
+    queryParams[id] = this._selected[id].join(';');
     this.router.navigate([], {
       queryParams,
       replaceUrl: true,

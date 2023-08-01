@@ -1,6 +1,6 @@
 import * as Plot from '@observablehq/plot';
 
-import { State, LayerConfig, Chart, FilterOption, SelectFilterItem } from "./base-state";
+import { State, LayerConfig, Chart, FilterOption, SelectFilterItem, MultipleSelectFilterItem } from "./base-state";
 import { TREE_COLOR_INTERPOLATE, QP_CERTAINTY_CERTAIN, QP_CERTAINTY_SUSPECTED, TREE_COLOR_LEGEND, TREE_FILTER_ITEMS, QP_CANOPIES, QP_CANOPIES_NONE, QP_CANOPIES_MATCHED, QP_CANOPIES_LIKELY, QP_CANOPIES_MATCHED_LIKELY } from './consts-trees';
 
 export class TreesState extends State {
@@ -55,11 +55,12 @@ export class TreesState extends State {
             }
         }
         let speciesQuery = 'TRUE';
-        this.filters.species = this.filters.species || 'all';
-        if (this.filters.species !== 'all') {
-            speciesQuery = `"attributes-species-clean-en" = '${this.filters.species}'`;
+        this.filters.species = (this.filters.species || '').split(';').filter((s: string) => s.length > 0)
+        if (this.filters.species.length > 0) {
+            speciesQuery = this.filters.species.map((s: string) => `'${s}'`).join(',');
+            speciesQuery = `"attributes-species-clean-en" IN (${speciesQuery})`;
             this.layerConfig['trees'].filter.push(
-                ['==', ['get', 'species_en'], ["literal", this.filters.species]]
+                ['in', ['get', 'species_en'], ['literal', this.filters.species]]
             );
         }
         this.sql = [
@@ -128,11 +129,11 @@ export class TreesState extends State {
             ));
         }
         if (data[2].length) {
-            this.filterItems = [...this.filterItems, new SelectFilterItem(
+            this.filterItems = [...this.filterItems, new MultipleSelectFilterItem(
                 'species',
-                'סינון לפי מין העץ...',
-                [new FilterOption('all', 'כל המינים'),
-                 ...data[2].map((d: any) => new FilterOption(d['species_en'], d['species_he']))]
+                'סינון לפי מין העץ:',
+                'בחירת מיני עצים...',
+                 data[2].map((d: any) => new FilterOption(d['species_en'], d['species_he']))
             )];
         }
     }

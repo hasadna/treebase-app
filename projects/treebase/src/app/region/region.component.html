@@ -13,6 +13,7 @@
             </div>
         </div>
     </div>
+    <a class='go-to-trees' [routerLink]='["/trees"]' [queryParamsHandling]='"merge"' [queryParams]='focusParams'>צפייה בעצים ב{{focusLink}} »</a>
     <div class='sources section'>
         <h2 class='tooltip' [matTooltip]='"מספר עצים לכל מקור מידע ללא הצלבה למקורות מידע אחרים"'>רשימת מקורות המידע</h2>
         <div class='info' *ngFor='let source of sources'>

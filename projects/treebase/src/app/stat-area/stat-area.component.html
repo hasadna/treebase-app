@@ -1,3 +1,5 @@
 <app-content mode='stat-area' [init]='!!stat_area' [back]='["/", "stat-areas"]' (state)='state = $event'>
-    <app-region  *ngIf='stat_area' [record]='stat_area' [sources]='sources' [name]='name'></app-region>
+    <app-region  *ngIf='stat_area' [record]='stat_area' [sources]='sources' [name]='name'
+                [focus]='"stat-area:" + stat_area["code"]' [focusLink]='"איזור סטטיסטי " + stat_area["code"]'
+    ></app-region>
 </app-content>
