@@ -11,7 +11,7 @@ export class FocusMode {
     }
 
     display(): string {
-        return `<span class='kind'>${this.label}:</span>&nbsp;<strong>${this.name || this.code}</strong>`;
+        return `<span class='kind'>${this.label ? this.label + ':' : ''}</span>&nbsp;<strong>${this.name || this.code}</strong>`;
     }
 
     boundsQuery(): string|null {
@@ -26,6 +26,10 @@ export class FocusMode {
         return {};
     }
 
+    polygonGeometry(): null | {type: string, coordinates: number[][][]} {
+        return null;
+    }
+
     static fromQueryParam(queryParam: string): FocusMode | null {
         const parts = queryParam.split(':');
         if (parts.length >= 2) {
@@ -37,6 +41,8 @@ export class FocusMode {
                 return new ParcelFocusMode(parts[1]);
             } else if (parts[0] === 'road') {
                 return new RoadFocusMode(parts[1]);
+            } else if (parts[0] === 'polygon') {
+                return new PolygonFocusMode(parts[1]);
             }
         }
         return null;
@@ -115,6 +121,40 @@ export class RoadFocusMode extends FocusMode {
 
     override treesQuery(): string|null {
         return `road_id='${this.code}'`;
+    }
+}
+
+
+export class PolygonFocusMode extends FocusMode {
+    geometry: { type: string; coordinates: number[][][]; };
+    constructor(coordinates: string) {
+        super('polygon', '', 'הפוליגון הנבחר');
+        let coords = coordinates.split(';').map((p) => p.split(',').map((c) => parseFloat(c)));
+        this.geometry = {
+            type: 'Polygon',
+            coordinates: [coords]
+        };
+    }
+
+    override mapFilters(): { [key: string]: any[]; } {
+        return {
+            trees: ['within', this.geometry]
+        };
+    }
+
+    override boundsQuery(): string|null {
+        return null;
+    }
+
+    override treesQuery(): string|null {
+        return `ST_Contains(
+            ST_GeomFromGeoJSON('${JSON.stringify(this.geometry)}'),
+            ST_SetSRID(ST_MakePoint("location-x", "location-y"), 4326)
+        )`;
+    }
+
+    override polygonGeometry(): null | { type: string; coordinates: number[][][]; } {
+        return this.geometry;
     }
 }
 

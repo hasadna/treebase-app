@@ -5,6 +5,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { StateService } from '../state.service';
 import { Router } from '@angular/router';
 import { ApiService } from '../api.service';
+import * as MapboxDraw from '@mapbox/mapbox-gl-draw';
 
 @UntilDestroy()
 @Component({
@@ -31,6 +32,10 @@ export class MapComponent implements AfterViewInit{
     'canopies',
     'trees',
   ];
+  POLYGON_LAYERS = [
+    'drawn-polygon',
+    'drawn-polygon-border',
+  ];
   CLICKS = [
     ['trees', 'trees', 'tree-id'],
     ['munis-fill', 'munis', 'muni_code'],
@@ -43,7 +48,7 @@ export class MapComponent implements AfterViewInit{
   map: mapboxgl.Map;
 
   focus_: string|null = null;
-
+  
 
   constructor(private mapboxService: MapboxService, private state: StateService,
               private router: Router, private api: ApiService) {
@@ -68,6 +73,8 @@ export class MapComponent implements AfterViewInit{
     this.map = new mapboxgl.Map(mapParams);
     this.map.addControl(new mapboxgl.AttributionControl(), 'top-right');
     this.map.addControl(new mapboxgl.NavigationControl({showCompass: false}), 'top-left');
+    const draw = new MapboxDraw({defaultMode: 'draw_polygon', controls: {polygon: true, trash: false, line_string: false, point: false, combine_features: false, uncombine_features: false}});
+    this.map.addControl(draw, 'top-left');
     this.map.dragRotate.disable();
     this.map.touchZoomRotate.disableRotation();
     this.map.touchPitch.disable();
@@ -102,6 +109,14 @@ export class MapComponent implements AfterViewInit{
         e.preventDefault();
         this.map.getCanvas().style.cursor = '';
       });
+      this.map.addSource('drawn-polygon', {
+        type: 'geojson',
+        data: {
+          type: 'FeatureCollection',
+          features: [],
+        },
+      });
+
       this.state.state.pipe(
         untilDestroyed(this),
       ).subscribe((state) => {
@@ -115,6 +130,7 @@ export class MapComponent implements AfterViewInit{
         console.log('STATE', state, this.map.getStyle().layers);
         if (state.filters?.focus !== this.focus_) {
           this.focus_ = state.filters?.focus;
+          let geom: any = null;
           if (state.focus) {
             const QUERY = state.focus.boundsQuery();
             if (QUERY) {
@@ -125,6 +141,22 @@ export class MapComponent implements AfterViewInit{
                 );
               });
             }
+            geom = state.focus.polygonGeometry();
+          }
+          if (geom) {
+            (this.map.getSource('drawn-polygon') as mapboxgl.GeoJSONSource).setData({
+              type: 'FeatureCollection',
+              features: [{
+                type: 'Feature',
+                geometry: geom,
+                properties: {},
+              }],
+            });
+          } else {
+            (this.map.getSource('drawn-polygon') as mapboxgl.GeoJSONSource).setData({
+              type: 'FeatureCollection',
+              features: [],
+            });
           }
         }
         const extraFilters = state.focus?.mapFilters() || {};
@@ -166,6 +198,33 @@ export class MapComponent implements AfterViewInit{
             }
           }
         });
+      });
+
+      for (const layer of this.POLYGON_LAYERS) {
+        const copyFrom: any = this.map.getStyle().layers.find((l) => l.id === layer + '-ref');
+        this.map.addLayer({
+          id: layer,
+          type: copyFrom.type,
+          source: 'drawn-polygon',
+          paint: copyFrom.paint,
+          layout: Object.assign(
+            copyFrom.layout,
+            {visibility: 'visible'}
+          )
+        }, layer + '-ref');
+      }
+      this.map.on('draw.create', (e) => {
+        const feature = e.features[0];
+        console.log('DRAW', feature);
+        const polygonFocus = feature.geometry.coordinates[0].map((c: number[]) => c.map((cc: number) => cc.toFixed(5)).join(',')).join(';');
+        this.router.navigate(['/trees'], {queryParamsHandling: 'merge', queryParams: {focus: `polygon:${polygonFocus}`}});
+        draw.deleteAll();
+      });
+      this.map.on('draw.modechange', (e) => {
+        console.log('DRAW MODE', e.mode);
+        if (e.mode === 'draw_polygon') {
+          this.router.navigate(['/trees'], {queryParamsHandling: 'preserve'});
+        }
       });
       this.mapboxService.map = this.map;
     });
