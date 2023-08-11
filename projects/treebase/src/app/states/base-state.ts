@@ -72,6 +72,7 @@ export class State {
     filterItems: FilterItem[] = [];
     focus: FocusMode|null = null;
     focusQuery: string;
+    clearFilters = false;
 
     constructor(public mode: StateMode, public id?: string, public filters: any = {}) {
         if (this.filters.focus) {
@@ -80,6 +81,7 @@ export class State {
             this.focus = null;
         }
         this.focusQuery = this.focus?.treesQuery() || 'TRUE';
+        this.clearFilters = this.filters && Object.keys(this.filters).length > 0;
     }
     
     process(api: ApiService): Observable<any> {

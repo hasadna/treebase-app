@@ -40,6 +40,9 @@
         </div>
     </div>
     <div class='last'>
+        <div class='clear' *ngIf='_clear'>
+            <a [routerLink]='[]' [queryParams]='{}'>ניקוי המסננים</a>
+        </div>
         <app-export *ngIf='!!downloadQuery' [query]='downloadQuery || ""'></app-export>
         <app-share></app-share>
     </div>

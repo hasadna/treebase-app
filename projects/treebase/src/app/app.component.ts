@@ -19,7 +19,7 @@ export class AppComponent {
       map((event) => {
         const ne = event as NavigationEnd;
         const segments = ne.url.split('?')[0].split('/').filter(x => x.length > 0);
-        const qs = ('?' + ne.url.split('?')[1]) || '';
+        const qs = '?' + (ne.url.split('?')[1] || '');
         const sp = new URLSearchParams(qs);
         const params = Object.fromEntries(sp.entries());
         return {

@@ -16,6 +16,7 @@ export class FilterComponent {
   filters: any = {};
   _selected: any = {};
   _checked: any = {};
+  _clear = false;
   downloadQuery: string | null = null;
 
   constructor(public stateSvc: StateService, private router: Router) {
@@ -48,6 +49,7 @@ export class FilterComponent {
       this._checked[control.id] = this.filters[control.id] !== '0';
     });
     this.downloadQuery = state.downloadQuery;
+    this._clear = state.clearFilters;
   }
 
   updateCheck(id: string, element: EventTarget | null) {

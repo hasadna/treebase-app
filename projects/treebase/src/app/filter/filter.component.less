@@ -78,6 +78,7 @@
     }
 
     .controls {
+        flex: 1 1 auto;
         display: flex;
         flex-flow: row wrap;
         align-items: center;
@@ -158,6 +159,15 @@
         align-items: center;
         justify-content: flex-start;
         gap: 12px;
+        .clear {
+            a, a:visited {
+                color: @color-midgrey;
+                &:hover, &:focus {
+                    color: @color-grey;
+                }
+                text-decoration: none;
+            }
+        }
     }
 
 }
