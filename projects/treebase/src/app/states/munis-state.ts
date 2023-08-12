@@ -54,6 +54,14 @@ export class MunisState extends State {
         };
         this.layerConfig['trees'] = new LayerConfig(null, null, null);
         this.filterItems = MUNIS_FILTER_ITEMS;
+
+        this.popupLayers = {
+            'munis-fill': [
+                {label: 'שם הרשות', content: (p: any) => p.muni_name},
+                {label: 'אוכלוסיה', content: (p: any) => p.population.toLocaleString()},
+                {label: 'כיסוי צומח לנפש', content: (p: any) => p.canopy_per_capita.toFixed(1) + ' מ"ר'},
+            ]//stat-areas-fill
+        }
     }
 
     override handleData(data: any[][]) {

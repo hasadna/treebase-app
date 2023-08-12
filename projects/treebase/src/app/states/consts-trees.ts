@@ -30,13 +30,6 @@ export const TREE_COLOR_LEGEND = new Legend('מקרא וודאות זיהוי', 
     new LegendItem('#64B883', 'חשד לעץ'),
 ]);
 
-export const QP_JS = 'src';
-export const QP_JS_ALL = 'all';
-export const QP_JS_GOV_SRV = 'gov-survey';
-export const QP_JS_GOV_RS = 'gov-remote-sensing';
-export const QP_JS_MUNI_SRV = 'muni-survey';
-export const QP_JS_PRIVATE_SRV = 'private-survey';
-
 export const TREE_FILTER_ITEMS = [
     new SelectFilterItem(QP_CANOPIES, 'הצגת חופות:', [
         new FilterOption(QP_CANOPIES_ALL, 'הצגת כל החופות'),

@@ -4,6 +4,9 @@ import { FocusMode } from "./focus-modes";
 
 export type StateMode = 'about' | 'trees' | 'tree' | 'stat-areas' | 'stat-area' | 'munis' | 'muni' | 'empty';
 
+export type PopupLayerItem = {label: string, content: (f: any) => string};
+export type PopupLayers = {[key: string]: PopupLayerItem[]};
+
 export class LayerConfig {
     constructor(public filter: any | null, public paint: any | null, public layout: any | null) {
     }
@@ -73,6 +76,7 @@ export class State {
     focus: FocusMode|null = null;
     focusQuery: string;
     clearFilters = false;
+    popupLayers: PopupLayers = {};
 
     constructor(public mode: StateMode, public id?: string, public filters: any = {}) {
         if (this.filters.focus) {

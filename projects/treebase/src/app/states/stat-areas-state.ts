@@ -30,6 +30,15 @@ export class StatAreasState extends State {
         };
         this.layerConfig['trees'] = new LayerConfig(null, null, null);
         this.filterItems = STAT_AREA_FILTER_ITEMS;
+
+        this.popupLayers = {
+            'stat-areas-fill': [
+                {label: 'מזהה האזור', content: (p: any) => p.code},
+                {label: 'יישוב', content: (p: any) => p.city_name || 'לא ידוע'},
+                {label: 'אחוז כיסוי צומח', content: (p: any) => (100 * p.canopy_area_ratio).toFixed(1) + '%'},
+            ]
+        }
+
     }
 
     override handleData(data: any[][]) {

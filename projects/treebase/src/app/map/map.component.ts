@@ -6,6 +6,8 @@ import { StateService } from '../state.service';
 import { Router } from '@angular/router';
 import { ApiService } from '../api.service';
 import * as MapboxDraw from '@mapbox/mapbox-gl-draw';
+import { Subject, debounceTime, distinct, distinctUntilChanged } from 'rxjs';
+import { PopupLayerItem, PopupLayers } from '../states/base-state';
 
 @UntilDestroy()
 @Component({
@@ -43,12 +45,14 @@ export class MapComponent implements AfterViewInit{
   ];
   
   @ViewChild('map') mapEl: ElementRef;
-  // @ViewChild('hoverPopup') hoverPopupEl: ElementRef;
 
   map: mapboxgl.Map;
 
   focus_: string|null = null;
   
+  popupQ = new Subject<any | null>();
+  popup: mapboxgl.Popup | null = null;
+  popupLayers: PopupLayers = {};
 
   constructor(private mapboxService: MapboxService, private state: StateService,
               private router: Router, private api: ApiService) {
@@ -100,6 +104,9 @@ export class MapComponent implements AfterViewInit{
           e.preventDefault();
           if (e.features && e.features.length > 0) {
             this.map.getCanvas().style.cursor = 'pointer';
+            if (!!this.popupLayers[layer]) {
+              this.popupQ.next(Object.assign({}, e.features[0], {lngLat: e.lngLat}));
+            }
           }
         });
       });
@@ -109,6 +116,25 @@ export class MapComponent implements AfterViewInit{
         }
         e.preventDefault();
         this.map.getCanvas().style.cursor = '';
+        this.popupQ.next(null);
+      });
+      this.popupQ.pipe(
+        debounceTime(100),
+        distinctUntilChanged(),
+      ).subscribe((feature: any | null) => {
+        if (this.popup !== null) {
+          this.popup.remove();
+          this.popup = null;
+        }
+        if (feature !== null) {
+          const content = this.popupLayers[feature.layer.id].map((pli: PopupLayerItem) => {
+            return `<strong>${pli.label}</strong>: ${pli.content(feature.properties)}`;
+          }).join('<br/>');
+          this.popup = new mapboxgl.Popup({ closeButton: false })
+              .setLngLat(feature.lngLat)
+              .setHTML(content)
+              .addTo(this.map);
+        }
       });
       this.map.addSource('drawn-polygon', {
         type: 'geojson',
@@ -199,6 +225,7 @@ export class MapComponent implements AfterViewInit{
             }
           }
         });
+        this.popupLayers = state.popupLayers;
       });
 
       for (const layer of this.POLYGON_LAYERS) {
