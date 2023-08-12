@@ -75,6 +75,7 @@ export class MapComponent implements AfterViewInit{
     this.map.addControl(new mapboxgl.NavigationControl({showCompass: false}), 'top-left');
     const draw = new MapboxDraw({defaultMode: 'draw_polygon', controls: {polygon: true, trash: false, line_string: false, point: false, combine_features: false, uncombine_features: false}});
     this.map.addControl(draw, 'top-left');
+    draw.trash();
     this.map.dragRotate.disable();
     this.map.touchZoomRotate.disableRotation();
     this.map.touchPitch.disable();

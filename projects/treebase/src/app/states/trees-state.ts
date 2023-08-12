@@ -1,7 +1,7 @@
 import * as Plot from '@observablehq/plot';
 
 import { State, LayerConfig, Chart, FilterOption, SelectFilterItem, MultipleSelectFilterItem } from "./base-state";
-import { TREE_COLOR_INTERPOLATE, QP_CERTAINTY_CERTAIN, QP_CERTAINTY_SUSPECTED, TREE_COLOR_LEGEND, TREE_FILTER_ITEMS, QP_CANOPIES, QP_CANOPIES_NONE, QP_CANOPIES_MATCHED, QP_CANOPIES_LIKELY, QP_CANOPIES_MATCHED_LIKELY } from './consts-trees';
+import { TREE_COLOR_INTERPOLATE, QP_TREE_STATUS_CERTAIN, QP_TREE_STATUS_SUSPECTED, TREE_COLOR_LEGEND, TREE_FILTER_ITEMS, QP_CANOPIES, QP_CANOPIES_NONE, QP_CANOPIES_MATCHED, QP_CANOPIES_LIKELY, QP_CANOPIES_MATCHED_LIKELY, QP_TREE_STATUS, QP_TREE_STATUS_ALL, QP_TREE_STATUS_FILTER, QP_TREE_STATUS_UNREPORTED } from './consts-trees';
 
 export class TreesState extends State {
     constructor(filters: any) {
@@ -37,21 +37,23 @@ export class TreesState extends State {
                 ["linear"],
                 ["zoom"],
                 15, 0,
-                18, 1
+                18, 3
               ],
             'circle-stroke-color': '#ffffff',
         };
-        let certaintyCondition = 'TRUE';
+        let treeStatusCondition = 'TRUE';
         this.layerConfig['trees'].filter = [];
-        this.filters.certainty = this.filters.certainty || 'all';
-        if (this.filters.certainty !== 'all') {
+        this.filters[QP_TREE_STATUS] = this.filters[QP_TREE_STATUS] || QP_TREE_STATUS_ALL;
+        if (this.filters[QP_TREE_STATUS] !== QP_TREE_STATUS_ALL) {
             this.layerConfig['trees'].filter.push(
-                ['==', ['get', 'certainty'], this.filters.certainty === 'certain']
+                QP_TREE_STATUS_FILTER[this.filters[QP_TREE_STATUS]]
             );
-            if (this.filters.certainty === QP_CERTAINTY_CERTAIN) {
-                certaintyCondition = 'certainty = TRUE';
-            } else if (this.filters.certainty === QP_CERTAINTY_SUSPECTED) {
-                certaintyCondition = 'certainty = FALSE';
+            if (this.filters[QP_TREE_STATUS] === QP_TREE_STATUS_CERTAIN) {
+                treeStatusCondition = 'certainty = TRUE';
+            } else if (this.filters[QP_TREE_STATUS] === QP_TREE_STATUS_SUSPECTED) {
+                treeStatusCondition = 'certainty = FALSE';
+            } else if (this.filters[QP_TREE_STATUS] === QP_TREE_STATUS_UNREPORTED) {
+                treeStatusCondition = 'unreported = TRUE';
             }
         }
         let speciesQuery = 'TRUE';
@@ -64,14 +66,14 @@ export class TreesState extends State {
             );
         }
         this.sql = [
-            `SELECT count(1) AS count FROM trees_compact WHERE ${this.focusQuery} AND ${certaintyCondition} AND ${speciesQuery}`,
-            `SELECT jsonb_array_elements("joint-source-type") AS name, count(1) AS count FROM trees_compact WHERE ${this.focusQuery} AND ${certaintyCondition} AND ${speciesQuery} GROUP BY 1 ORDER BY 2 DESC`,
-            `SELECT "attributes-species-clean-he" AS species_he, "attributes-species-clean-en" AS species_en FROM trees_compact WHERE "attributes-species-clean-he" is not NULL AND ${this.focusQuery} AND ${certaintyCondition} GROUP BY 1, 2 ORDER BY 1`,
+            `SELECT count(1) AS count FROM trees_compact WHERE ${this.focusQuery} AND ${treeStatusCondition} AND ${speciesQuery}`,
+            `SELECT jsonb_array_elements("joint-source-type") AS name, count(1) AS count FROM trees_compact WHERE ${this.focusQuery} AND ${treeStatusCondition} AND ${speciesQuery} GROUP BY 1 ORDER BY 2 DESC`,
+            `SELECT "attributes-species-clean-he" AS species_he, "attributes-species-clean-en" AS species_en FROM trees_compact WHERE "attributes-species-clean-he" is not NULL AND ${this.focusQuery} AND ${treeStatusCondition} GROUP BY 1, 2 ORDER BY 1`,
         ];
         this.legend = TREE_COLOR_LEGEND;
         this.filterItems = TREE_FILTER_ITEMS;
         this.downloadQuery = `SELECT __fields__ FROM trees_processed WHERE "meta-tree-id" in (
-            SELECT "meta-tree-id" FROM trees_compact WHERE ${this.focusQuery} AND ${certaintyCondition}) AND ${speciesQuery} AND __geo__ ORDER BY "meta-tree-id" LIMIT 5000`;
+            SELECT "meta-tree-id" FROM trees_compact WHERE ${this.focusQuery} AND ${treeStatusCondition}) AND ${speciesQuery} AND __geo__ ORDER BY "meta-tree-id" LIMIT 5000`;
         if (this.layerConfig['trees'].filter.length > 1) {
             this.layerConfig['trees'].filter = ['all', ...this.layerConfig['trees'].filter];
         } else if (this.layerConfig['trees'].filter.length === 1) {

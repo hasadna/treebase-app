@@ -1,5 +1,5 @@
 import { State, LayerConfig } from "./base-state";
-import { TREE_COLOR_INTERPOLATE, TREE_COLOR_LEGEND, TREE_FILTER_ITEMS } from "./consts-trees";
+import { QP_TREE_STATUS, QP_TREE_STATUS_ALL, QP_TREE_STATUS_CERTAIN, QP_TREE_STATUS_FILTER, TREE_COLOR_INTERPOLATE, TREE_COLOR_LEGEND, TREE_FILTER_ITEMS } from "./consts-trees";
 
 export class TreeState extends State {
     constructor(id: string, filters: any) {
@@ -17,10 +17,11 @@ export class TreeState extends State {
                 3, 0
             ]
         };
-        if (this.filters.certainty !== 'all') {
+        if (this.filters[QP_TREE_STATUS] !== QP_TREE_STATUS_ALL) {
+            const filter = QP_TREE_STATUS_FILTER[this.filters[QP_TREE_STATUS]];
             this.layerConfig['trees'].filter = [
                 'any', 
-                ['==', ['get', 'certainty'], this.filters.certainty === 'certain'],
+                filter,
                 ['==', ['get', 'tree-id'], ['literal', this.id]],
             ]
         }
