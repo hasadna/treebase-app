@@ -1,7 +1,7 @@
 import * as Plot from '@observablehq/plot';
 
 import { State, LayerConfig, Chart, FilterOption, SelectFilterItem, MultipleSelectFilterItem } from "./base-state";
-import { TREE_COLOR_INTERPOLATE, QP_TREE_STATUS_CERTAIN, QP_TREE_STATUS_SUSPECTED, TREE_COLOR_LEGEND, TREE_FILTER_ITEMS, QP_CANOPIES, QP_CANOPIES_NONE, QP_CANOPIES_MATCHED, QP_CANOPIES_LIKELY, QP_CANOPIES_MATCHED_LIKELY, QP_TREE_STATUS, QP_TREE_STATUS_ALL, QP_TREE_STATUS_FILTER, QP_TREE_STATUS_UNREPORTED } from './consts-trees';
+import { TREE_COLOR_INTERPOLATE, QP_TREE_STATUS_CERTAIN, QP_TREE_STATUS_SUSPECTED, TREE_COLOR_LEGEND, TREE_FILTER_ITEMS, QP_CANOPIES, QP_CANOPIES_NONE, QP_CANOPIES_MATCHED, QP_CANOPIES_LIKELY, QP_CANOPIES_MATCHED_LIKELY, QP_TREE_STATUS, QP_TREE_STATUS_ALL, QP_TREE_STATUS_FILTER, QP_TREE_STATUS_UNREPORTED, QP_TREE_HEIGHT, QP_TREE_HEIGHT_ALL, QP_TREE_HEIGHT_WHERE, QP_TREE_HEIGHT_FILTERS, QP_BARK_DIAMETER, QP_BARK_DIAMETER_ALL, QP_BARK_DIAMETER_WHERE, QP_BARK_DIAMETER_FILTERS, QP_CANOPY_AREA, QP_CANOPY_AREA_ALL, QP_CANOPY_AREA_WHERE, QP_CANOPY_AREA_FILTERS } from './consts-trees';
 
 export class TreesState extends State {
     constructor(filters: any) {
@@ -65,9 +65,34 @@ export class TreesState extends State {
                 ['in', ['get', 'species_en'], ['literal', this.filters.species]]
             );
         }
+        let barkDiameterQuery = 'TRUE';
+        if (!!this.filters[QP_BARK_DIAMETER] && this.filters[QP_BARK_DIAMETER] !== QP_BARK_DIAMETER_ALL) {
+            barkDiameterQuery = QP_BARK_DIAMETER_WHERE[this.filters[QP_BARK_DIAMETER]];
+            this.layerConfig['trees'].filter.push(
+                QP_BARK_DIAMETER_FILTERS[this.filters[QP_BARK_DIAMETER]]
+            );
+        }
+
+        let canopyAreaQuery = 'TRUE';
+        if (!!this.filters[QP_CANOPY_AREA] && this.filters[QP_CANOPY_AREA] !== QP_CANOPY_AREA_ALL) {
+            canopyAreaQuery = QP_CANOPY_AREA_WHERE[this.filters[QP_CANOPY_AREA]];
+            this.layerConfig['trees'].filter.push(
+                QP_CANOPY_AREA_FILTERS[this.filters[QP_CANOPY_AREA]]
+            );
+        }
+
+        let heightQuery = 'TRUE';
+        if (!!this.filters[QP_TREE_HEIGHT] && this.filters[QP_TREE_HEIGHT] !== QP_TREE_HEIGHT_ALL) {
+            heightQuery = QP_TREE_HEIGHT_WHERE[this.filters[QP_TREE_HEIGHT]];
+            this.layerConfig['trees'].filter.push(
+                QP_TREE_HEIGHT_FILTERS[this.filters[QP_TREE_HEIGHT]]
+            );
+        }
+        const treePropsQuery = [barkDiameterQuery, canopyAreaQuery, heightQuery].join(' AND ');
+
         this.sql = [
-            `SELECT count(1) AS count FROM trees_compact WHERE ${this.focusQuery} AND ${treeStatusCondition} AND ${speciesQuery}`,
-            `SELECT jsonb_array_elements("joint-source-type") AS name, count(1) AS count FROM trees_compact WHERE ${this.focusQuery} AND ${treeStatusCondition} AND ${speciesQuery} GROUP BY 1 ORDER BY 2 DESC`,
+            `SELECT count(1) AS count FROM trees_compact WHERE ${this.focusQuery} AND ${treeStatusCondition} AND ${speciesQuery} AND ${treePropsQuery}`,
+            `SELECT jsonb_array_elements("joint-source-type") AS name, count(1) AS count FROM trees_compact WHERE ${this.focusQuery} AND ${treeStatusCondition} AND ${speciesQuery} AND ${treePropsQuery} GROUP BY 1 ORDER BY 2 DESC`,
             `SELECT "attributes-species-clean-he" AS species_he, "attributes-species-clean-en" AS species_en FROM trees_compact WHERE "attributes-species-clean-he" is not NULL AND ${this.focusQuery} AND ${treeStatusCondition} GROUP BY 1, 2 ORDER BY 1`,
         ];
         this.legend = TREE_COLOR_LEGEND;
@@ -131,12 +156,12 @@ export class TreesState extends State {
             ));
         }
         if (data[2].length) {
-            this.filterItems = [...this.filterItems, new MultipleSelectFilterItem(
+            this.filterItems = [...this.filterItems.slice(0, 2), new MultipleSelectFilterItem(
                 'species',
                 'סינון לפי מין העץ:',
                 'בחירת מיני עצים...',
                  data[2].map((d: any) => new FilterOption(d['species_en'], d['species_he']))
-            )];
+            ), ...this.filterItems.slice(2)];
         }
     }
 

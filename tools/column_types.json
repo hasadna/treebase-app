@@ -1,0 +1,503 @@
+[
+  {
+    "name": "meta:date",
+    "title": "תאריך עדכון המידע",
+    "description": "למשל, תאריך ביצוע הסקר",
+    "dataType": "date",
+    "mandatory": true,
+    "options": {}
+  },
+  {
+    "name": "meta:source",
+    "title": "מזהה מקור המידע",
+    "description": "למשל, ״סקר עצים ירוחם״ או ״רשות המים״",
+    "dataType": "string",
+    "mandatory": true,
+    "options": {}
+  },
+  {
+    "name": "meta:url",
+    "title": "קישור למקור המידע",
+    "description": "קישור למקור ממנו התקבל המידע",
+    "dataType": "string",
+    "mandatory": true,
+    "options": {
+      "format": "uri"
+    }
+  },
+  {
+    "name": "meta:source-type",
+    "title": "סוג מקור המידע",
+    "description": "תיאור של הארגון ממנו הגיע המידע\nערכים מותרים: מוניציפלי, ממשלתי, פרטי",
+    "dataType": "string",
+    "mandatory": true,
+    "options": {
+      "enum": [
+        "מוניציפלי",
+        "ממשלתי",
+        "פרטי"
+      ]
+    }
+  },
+  {
+    "name": "meta:collection-type",
+    "title": "אופן איסוף המידע",
+    "description": "תיאור של האופן בו נאסף המידע\nערכים מותרים: חישה מרחוק, סקר רגלי",
+    "dataType": "string",
+    "mandatory": true,
+    "options": {
+      "enum": [
+        "חישה מרחוק",
+        "סקר רגלי"
+      ]
+    }
+  },
+  {
+    "name": "meta:tree-id",
+    "title": "מזעץ",
+    "description": "המזהה הארצי של העץ",
+    "dataType": "string",
+    "mandatory": false,
+    "options": {}
+  },
+  {
+    "name": "meta:internal-id",
+    "title": "מזהה העץ",
+    "description": "מזהה פנימי, תלוי מקור, של העץ",
+    "dataType": "string",
+    "mandatory": false,
+    "options": {}
+  },
+  {
+    "name": "location:x",
+    "title": "קו אורך",
+    "description": "קואורדינטת X, בהתאם לרשת שנבחרה",
+    "dataType": "number",
+    "mandatory": true,
+    "options": {}
+  },
+  {
+    "name": "location:y",
+    "title": "קו רוחב",
+    "description": "קואורדינטת Y, בהתאם לרשת שנבחרה",
+    "dataType": "number",
+    "mandatory": true,
+    "options": {}
+  },
+  {
+    "name": "location:grid",
+    "title": "רשת קואורדינטות",
+    "description": "הרשת ממנה נגזרו הקואורדינטות\nערכים מותרים: ישראל, עולמית, ITM, wgs84, epsg:4326, epsg:2039",
+    "dataType": "string",
+    "mandatory": false,
+    "options": {
+      "enum": [
+        "ישראל",
+        "עולמית",
+        "ITM",
+        "wgs84",
+        "epsg:4326",
+        "epsg:2039"
+      ]
+    }
+  },
+  {
+    "name": "location:accuracy",
+    "title": "דיוק",
+    "description": "דיוק מדידת המיקום במטרים",
+    "dataType": "number",
+    "mandatory": false,
+    "options": {}
+  },
+  {
+    "name": "location:elevation",
+    "title": "גובה מעל פני הים",
+    "description": "גובה הקרקע מעל פני הים, במטרים",
+    "dataType": "number",
+    "mandatory": false,
+    "options": {}
+  },
+  {
+    "name": "location:city",
+    "title": "שם יישוב",
+    "description": "שם היישוב בו מצוי העץ",
+    "dataType": "string",
+    "mandatory": false,
+    "options": {}
+  },
+  {
+    "name": "location:street",
+    "title": "שם רחוב",
+    "description": "שם הרחוב הקרוב ביותר לעץ",
+    "dataType": "string",
+    "mandatory": false,
+    "options": {}
+  },
+  {
+    "name": "location:street-number",
+    "title": "מספר בית",
+    "description": "מספר הבית הקרוב ביותר לעץ",
+    "dataType": "string",
+    "mandatory": false,
+    "options": {}
+  },
+  {
+    "name": "location:address",
+    "title": "פרטי כתובת",
+    "description": "מידע נוסף הנוגע למיקום העץ",
+    "dataType": "string",
+    "mandatory": false,
+    "options": {}
+  },
+  {
+    "name": "location:block",
+    "title": "גוש",
+    "description": "מזהה הגוש בו מצוי העץ",
+    "dataType": "string",
+    "mandatory": false,
+    "options": {}
+  },
+  {
+    "name": "location:plot",
+    "title": "חלקה",
+    "description": "מזהה החלקה בה מצוי העץ",
+    "dataType": "string",
+    "mandatory": false,
+    "options": {}
+  },
+  {
+    "name": "environment:type",
+    "title": "מרחב העץ",
+    "description": "תיאור המרחב המיידי של העץ\nערכים מותרים: רחוב, גינה/פארק ציבורי, חורשה, מוסד ציבורי, מגרש פרטי",
+    "dataType": "string",
+    "mandatory": false,
+    "options": {
+      "enum": [
+        "רחוב",
+        "גינה/פארק ציבורי",
+        "חורשה",
+        "מוסד ציבורי",
+        "מגרש פרטי"
+      ]
+    }
+  },
+  {
+    "name": "environment:description",
+    "title": "מרחב מפורט",
+    "description": "פרטים נוספים לגבי המרחב\nערכים מותרים: חצר פרטית – בלב השטח (4 מ' משטח ציבורי)\nחצר פרטית – צמוד דופן לשטח ציבורי (עד 4 מ' משטח ציבורי)\nמדרכה\nאי תנועה\nמתחת לקו מתח \nעץ בודד בשטח פתוח (מחוץ לישוב)\nעץ באזור מדברי/יבש בשטח פתוח (מחוץ לישוב)",
+    "dataType": "string",
+    "mandatory": false,
+    "options": {
+      "commaSeparated": true
+    }
+  },
+  {
+    "name": "environment:habitat",
+    "title": "בית הגידול",
+    "description": "בית הגידול של העץ\nערכים מותרים: ערוגה פתוחה\nגומת שתילה ברחוב\nבית גידול מוגבל (אספלט או חלוקי נחל וכו')\nמדשאה\nתעלת גידול\nמצע מנותק (מיכל)",
+    "dataType": "string",
+    "mandatory": false,
+    "options": {}
+  },
+  {
+    "name": "environment:habitat-volume",
+    "title": "נפח בית הגידול",
+    "description": "נפח בית הגידול של העץ במ״ק",
+    "dataType": "number",
+    "mandatory": false,
+    "options": {}
+  },
+  {
+    "name": "environment:irrigated",
+    "title": "השקיה פעילה",
+    "description": "האם העץ מושקה",
+    "dataType": "boolean",
+    "mandatory": false,
+    "options": {}
+  },
+  {
+    "name": "environment:irrigation-water-quality",
+    "title": "איכות מי ההשקייה",
+    "description": "טיב המים המשקים את העץ\nערכים מותרים: TBD",
+    "dataType": "string",
+    "mandatory": false,
+    "options": {}
+  },
+  {
+    "name": "environment:irrigation-type",
+    "title": "סוג ההשקיה",
+    "description": "האופן בו העץ מושקה\nערכים מותרים: קו ייחודי לעץ \nמושקה מהדשא \nמושקה מערוגה סמוכה",
+    "dataType": "string",
+    "mandatory": false,
+    "options": {}
+  },
+  {
+    "name": "environment:sitting-area",
+    "title": "איזור ישיבה",
+    "description": "האם בסביבת העץ קיים איזור ישיבה",
+    "dataType": "boolean",
+    "mandatory": false,
+    "options": {}
+  },
+  {
+    "name": "environment:lighting",
+    "title": "תאורה",
+    "description": "האם בסביבת העץ ישנה תאורה",
+    "dataType": "boolean",
+    "mandatory": false,
+    "options": {}
+  },
+  {
+    "name": "environment:signage",
+    "title": "שילוט",
+    "description": "האם בסביבת העץ קיים שילוט",
+    "dataType": "boolean",
+    "mandatory": false,
+    "options": {}
+  },
+  {
+    "name": "environment:grass",
+    "title": "מדשאה",
+    "description": "האם בסביבת העץ קיימת מדשאה",
+    "dataType": "boolean",
+    "mandatory": false,
+    "options": {}
+  },
+  {
+    "name": "environment:pavement",
+    "title": "ריצוף",
+    "description": "האם בסביבת העץ קיים ריצוף",
+    "dataType": "boolean",
+    "mandatory": false,
+    "options": {}
+  },
+  {
+    "name": "attributes:year-planted",
+    "title": "מועד נטיעה",
+    "description": "השנה בה ניטע העץ (או תאריך מדויק)",
+    "dataType": "date",
+    "mandatory": false,
+    "options": {}
+  },
+  {
+    "name": "attributes:age",
+    "title": "גיל",
+    "description": "גיל העץ",
+    "dataType": "number",
+    "mandatory": false,
+    "options": {}
+  },
+  {
+    "name": "attributes:age-estimated",
+    "title": "גיל משוער?",
+    "description": "האם הגיל משוער או מדויק",
+    "dataType": "boolean",
+    "mandatory": false,
+    "options": {}
+  },
+  {
+    "name": "attributes:genus",
+    "title": "סוג העץ",
+    "description": "סוג העץ\nערכים מותרים: TBD",
+    "dataType": "string",
+    "mandatory": false,
+    "options": {}
+  },
+  {
+    "name": "attributes:species",
+    "title": "מין העץ",
+    "description": "מין העץ\nערכים מותרים: TBD",
+    "dataType": "string",
+    "mandatory": false,
+    "options": {}
+  },
+  {
+    "name": "attributes:num-barks",
+    "title": "מספר גזעים",
+    "description": "מספר הגזעים",
+    "dataType": "integer",
+    "mandatory": false,
+    "options": {}
+  },
+  {
+    "name": "attributes:bark-diameter",
+    "title": "קוטר הגזע",
+    "description": "קוטר הגזע, בס״מ",
+    "dataType": "number",
+    "mandatory": false,
+    "options": {}
+  },
+  {
+    "name": "attributes:bark-circumference",
+    "title": "היקף הגזע",
+    "description": "היקף הגזע, בס״מ",
+    "dataType": "number",
+    "mandatory": false,
+    "options": {}
+  },
+  {
+    "name": "attributes:height",
+    "title": "גובה העץ",
+    "description": "גובה העץ, במטרים",
+    "dataType": "number",
+    "mandatory": false,
+    "options": {}
+  },
+  {
+    "name": "attributes:canopy-diameter",
+    "title": "קוטר הצמרת",
+    "description": "קוטר חופת הצמרת, במטרים",
+    "dataType": "number",
+    "mandatory": false,
+    "options": {}
+  },
+  {
+    "name": "attributes:canopy-area",
+    "title": "שטח הצמרת",
+    "description": "שטח הצמרת, במטרים רבועים",
+    "dataType": "number",
+    "mandatory": false,
+    "options": {}
+  },
+  {
+    "name": "attributes:good-status",
+    "title": "במצב טוב?",
+    "description": "אבחנה גסה לגבי מצב ובריאות העץ",
+    "dataType": "boolean",
+    "mandatory": false,
+    "options": {}
+  },
+  {
+    "name": "attributes:health-score",
+    "title": "בריאות העץ",
+    "description": "אבחנה יותר מדויקת לגבי בריאות העץ\nערכים מותרים: מ-1 עד 5",
+    "dataType": "integer",
+    "mandatory": false,
+    "options": {}
+  },
+  {
+    "name": "attributes:description",
+    "title": "תיאור מילולי",
+    "description": "תיאור מילולי של מצב העץ\nערכים מותרים: דלילות חופה \nהתוונות ענפים בצמרת העץ\nענפים שבורים בחופה \nשינויי צבע בעלוות העץ ( הצהבות \\ החמות\\ כלורוזה...)\nמבנה לא תקין (כמו :ענפים בעלי זוויות חדות, קליפה כלואה)\nפציעות מכניות בגזע ובענפים\nסימני רקבון , צמג או שרף\nסימני גורמי מחלה ( פטריות מדף, כתמי עלים וכו') \nסימני מזיקים ( הימצאות מזיקים או סימניהם) \nחללים בגזע \nהתרוממות שורשים \nרקבון צוואר שורש\nנטייה חדה במבנה העץ",
+    "dataType": "string",
+    "mandatory": false,
+    "options": {
+      "enum": [
+        "דלילות חופה \nהתוונות ענפים בצמרת העץ\nענפים שבורים בחופה \nשינויי צבע בעלוות העץ ( הצהבות \\ החמות\\ כלורוזה...)\nמבנה לא תקין (כמו :ענפים בעלי זוויות חדות",
+        "קליפה כלואה)\nפציעות מכניות בגזע ובענפים\nסימני רקבון",
+        "צמג או שרף\nסימני גורמי מחלה ( פטריות מדף",
+        "כתמי עלים וכו') \nסימני מזיקים ( הימצאות מזיקים או סימניהם) \nחללים בגזע \nהתרוממות שורשים \nרקבון צוואר שורש\nנטייה חדה במבנה העץ"
+      ]
+    }
+  },
+  {
+    "name": "importance:historic",
+    "title": "חשיבות היסטורית",
+    "description": "האם לעץ יש חשיבות היסטורית, ומהי",
+    "dataType": "string",
+    "mandatory": false,
+    "options": {}
+  },
+  {
+    "name": "importance:symbolic",
+    "title": "חשיבות סמלית",
+    "description": "האם לעץ יש חשיבות סמלית, ומהי",
+    "dataType": "string",
+    "mandatory": false,
+    "options": {}
+  },
+  {
+    "name": "importance:aesthetic",
+    "title": "חשיבות אסתטית",
+    "description": "האם לעץ יש חשיבות אסתטית, ומהי",
+    "dataType": "string",
+    "mandatory": false,
+    "options": {}
+  },
+  {
+    "name": "importance:botanical",
+    "title": "חשיבות בוטנית",
+    "description": "האם לעץ יש חשיבות בוטנית, ומהי",
+    "dataType": "string",
+    "mandatory": false,
+    "options": {}
+  },
+  {
+    "name": "importance:community",
+    "title": "חשיבות קהילתית",
+    "description": "האם לעץ יש חשיבות קהילתית, ומהי",
+    "dataType": "string",
+    "mandatory": false,
+    "options": {}
+  },
+  {
+    "name": "photos:general",
+    "title": "תמונות כלליות",
+    "description": "תמונות כלליות / לא מקוטלגות של העץ",
+    "dataType": "string",
+    "mandatory": false,
+    "options": {
+      "commaSeparated": true
+    }
+  },
+  {
+    "name": "photos:bark",
+    "title": "תמונות גזע",
+    "description": "תמונות תקריב של גזע העץ",
+    "dataType": "string",
+    "mandatory": false,
+    "options": {
+      "commaSeparated": true
+    }
+  },
+  {
+    "name": "photos:leaf",
+    "title": "תמונות עלה",
+    "description": "תמונות תקריב של עלי העץ",
+    "dataType": "string",
+    "mandatory": false,
+    "options": {
+      "commaSeparated": true
+    }
+  },
+  {
+    "name": "photos:fruit",
+    "title": "תמונות פרי",
+    "description": "תמונות תקריב של פרי העץ",
+    "dataType": "string",
+    "mandatory": false,
+    "options": {
+      "commaSeparated": true
+    }
+  },
+  {
+    "name": "photos:wide-view",
+    "title": "תמונות מבט רחב",
+    "description": "תמונות רחבות של העץ",
+    "dataType": "string",
+    "mandatory": false,
+    "options": {
+      "commaSeparated": true
+    }
+  },
+  {
+    "name": "photos:ground",
+    "title": "תמונות קרקע",
+    "description": "תמונות תקריב של תחתית הגזע של העץ",
+    "dataType": "string",
+    "mandatory": false,
+    "options": {
+      "commaSeparated": true
+    }
+  },
+  {
+    "name": "photos:top-view",
+    "title": "תמונות אוויריות",
+    "description": "תמונות של העץ במבט על",
+    "dataType": "string",
+    "mandatory": false,
+    "options": {
+      "commaSeparated": true
+    }
+  }
+]

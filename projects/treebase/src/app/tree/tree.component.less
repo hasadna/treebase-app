@@ -19,4 +19,33 @@
             color: @color-grey;
         }
     }
+    .extra-info {
+        .item {
+            display: flex;
+            flex-flow: row;
+            align-items: flex-start;;
+            justify-content: space-between;
+            gap: 16px;
+            .title {
+                flex: 0 0 auto;
+                white-space: nowrap;
+            }
+            .values {
+                flex: 1 1 auto;
+                .font-semibold;
+                font-size: 15px;
+                line-height: 24px;
+                color: @color-grey;
+                display: flex;
+                flex-flow: column;
+                align-items: flex-end;
+                gap: 2px;
+
+                img {
+                    width: 100%;
+                    object-fit: contain;
+                }
+            }        
+        }
+    }
 }

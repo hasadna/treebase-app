@@ -4,7 +4,9 @@ import { QP_TREE_STATUS, QP_TREE_STATUS_ALL, QP_TREE_STATUS_CERTAIN, QP_TREE_STA
 export class TreeState extends State {
     constructor(id: string, filters: any) {
         super('tree', id, filters);
-        this.sql = [`SELECT * FROM trees_processed WHERE "meta-tree-id" = '${this.id}'`];
+        this.sql = [
+            `SELECT * FROM trees_processed WHERE "meta-tree-id" = '${this.id}'`
+        ];
         for (const id of ['trees', 'canopies']) {
             this.layerConfig[id] = new LayerConfig(null, null, null);
         }
@@ -17,7 +19,7 @@ export class TreeState extends State {
                 3, 0
             ]
         };
-        if (this.filters[QP_TREE_STATUS] !== QP_TREE_STATUS_ALL) {
+        if (!!this.filters[QP_TREE_STATUS] && this.filters[QP_TREE_STATUS] !== QP_TREE_STATUS_ALL) {
             const filter = QP_TREE_STATUS_FILTER[this.filters[QP_TREE_STATUS]];
             this.layerConfig['trees'].filter = [
                 'any', 
