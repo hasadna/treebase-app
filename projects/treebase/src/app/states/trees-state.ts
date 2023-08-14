@@ -98,7 +98,7 @@ export class TreesState extends State {
         this.legend = TREE_COLOR_LEGEND;
         this.filterItems = TREE_FILTER_ITEMS;
         this.downloadQuery = `SELECT __fields__ FROM trees_processed WHERE "meta-tree-id" in (
-            SELECT "meta-tree-id" FROM trees_compact WHERE ${this.focusQuery} AND ${treeStatusCondition}) AND ${speciesQuery} AND __geo__ ORDER BY "meta-tree-id" LIMIT 5000`;
+            SELECT "meta-tree-id" FROM trees_compact WHERE ${this.focusQuery} AND ${treeStatusCondition}) AND ${speciesQuery} AND ${treePropsQuery} AND __geo__ ORDER BY "meta-tree-id" LIMIT 5000`;
         if (this.layerConfig['trees'].filter.length > 1) {
             this.layerConfig['trees'].filter = ['all', ...this.layerConfig['trees'].filter];
         } else if (this.layerConfig['trees'].filter.length === 1) {
