@@ -57,7 +57,7 @@ export const TREE_FILTER_ITEMS = [
         new FilterOption(QP_TREE_STATUS_ALL, 'כל העצים'),
         new FilterOption(QP_TREE_STATUS_CERTAIN, 'רק עצים מזוהים'),
         new FilterOption(QP_TREE_STATUS_SUSPECTED, 'רק עצים חשודים'),
-        new FilterOption(QP_TREE_STATUS_UNREPORTED, 'רק עצים שלא דווחו לרשות המים'),
+        new FilterOption(QP_TREE_STATUS_UNREPORTED, 'רק עצים מזוהים שלא דווחו לרשות המים'),
     ]),
     new SelectFilterItem(QP_CANOPIES, 'הצגת חופות:', [
         new FilterOption(QP_CANOPIES_ALL, 'הצגת כל החופות'),
