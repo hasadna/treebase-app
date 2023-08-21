@@ -3,7 +3,8 @@ export const taxonomy = [
     "description": "גובה הקרקע מעל פני הים, במטרים",
     "name": "location-elevation",
     "title": "גובה מעל פני הים",
-    "type": "number"
+    "type": "number",
+    "unit": "מ׳"
   },
   {
     "description": "שם היישוב בו מצוי העץ",
@@ -63,7 +64,8 @@ export const taxonomy = [
     "description": "נפח בית הגידול של העץ במ״ק",
     "name": "environment-habitat-volume",
     "title": "נפח בית הגידול",
-    "type": "number"
+    "type": "number",
+    "unit": "מ״ק"
   },
   {
     "description": "האם העץ מושקה",
@@ -123,7 +125,8 @@ export const taxonomy = [
     "description": "גיל העץ",
     "name": "attributes-age",
     "title": "גיל",
-    "type": "number"
+    "type": "number",
+    "unit": "שנים"
   },
   {
     "description": "האם הגיל משוער או מדויק",
@@ -153,31 +156,36 @@ export const taxonomy = [
     "description": "קוטר הגזע, בס״מ",
     "name": "attributes-bark-diameter",
     "title": "קוטר הגזע",
-    "type": "number"
+    "type": "number",
+    "unit": "ס״מ"
   },
   {
     "description": "היקף הגזע, בס״מ",
     "name": "attributes-bark-circumference",
     "title": "היקף הגזע",
-    "type": "number"
+    "type": "number",
+    "unit": "ס״מ"
   },
   {
     "description": "גובה העץ, במטרים",
     "name": "attributes-height",
     "title": "גובה העץ",
-    "type": "number"
+    "type": "number",
+    "unit": "מ׳"
   },
   {
     "description": "קוטר חופת הצמרת, במטרים",
     "name": "attributes-canopy-diameter",
     "title": "קוטר הצמרת",
-    "type": "number"
+    "type": "number",
+    "unit": "מ׳"
   },
   {
     "description": "שטח הצמרת, במטרים רבועים",
     "name": "attributes-canopy-area",
     "title": "שטח הצמרת",
-    "type": "number"
+    "type": "number",
+    "unit": "מ״ר"
   },
   {
     "description": "אבחנה גסה לגבי מצב ובריאות העץ",

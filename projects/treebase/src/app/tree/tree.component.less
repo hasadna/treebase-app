@@ -31,7 +31,7 @@
                 white-space: nowrap;
             }
             .values {
-                flex: 1 1 auto;
+                flex: 1 1 100%;
                 .font-semibold;
                 font-size: 15px;
                 line-height: 24px;
@@ -44,6 +44,19 @@
                 img {
                     width: 100%;
                     object-fit: contain;
+                }
+
+                .unit {
+                    font-size: 10px;
+                    .font-regular;
+                }
+
+                .value-tuple {
+                    display: flex;
+                    flex-flow: row;
+                    align-items: baseline;  
+                    justify-content: flex-end;  
+                    width: 100%;
                 }
             }        
         }

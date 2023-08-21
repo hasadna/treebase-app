@@ -39,14 +39,15 @@
             <h2>מידע נוסף</h2>
             <div class='item' *ngFor='let item of extraItems'>
                 <span class='title tooltip' [matTooltip]='item.description'>{{item.title}}</span>
-                <div class='values tooltip'>
-                    <ng-container *ngFor='let v of item.values'>
-                        <span *ngIf='item.type === "string"' class='value' [matTooltip]='"כפי שהתקבל מ" + v.source'>{{v.value}}</span>
-                        <span *ngIf='item.type === "number"' class='value' [matTooltip]='"כפי שהתקבל מ" + v.source'>{{toNumber(v.value, 1)}}</span>
-                        <span *ngIf='item.type === "integer"' class='value' [matTooltip]='"כפי שהתקבל מ" + v.source'>{{toNumber(v.value, 0)}}</span>
-                        <span *ngIf='item.type === "boolean"' class='value' [matTooltip]='"כפי שהתקבל מ" + v.source'>{{toBoolean(v.value)}}</span>
+                <div class='values'>
+                    <div class='value-tuple' *ngFor='let v of item.values'>
+                        <span *ngIf='item.type === "string"' class='value tooltip' [matTooltip]='"כפי שהתקבל מ" + v.source'>{{v.value}}</span>
+                        <span *ngIf='item.type === "number"' class='value tooltip' [matTooltip]='"כפי שהתקבל מ" + v.source'>{{toNumber(v.value, 1)}}</span>
+                        <span *ngIf='item.type === "integer"' class='value tooltip' [matTooltip]='"כפי שהתקבל מ" + v.source'>{{toNumber(v.value, 0)}}</span>
+                        <span *ngIf='item.type === "boolean"' class='value tooltip' [matTooltip]='"כפי שהתקבל מ" + v.source'>{{toBoolean(v.value)}}</span>
                         <img *ngIf='item.type === "photo"' class='value' [matTooltip]='"כפי שהתקבל מ" + v.source' [src]='toImage(v.value)'>
-                    </ng-container>
+                        <span class='unit' *ngIf='!!item.unit'>&nbsp;{{item.unit}}</span>
+                    </div>
                 </div>
             </div>
         </div>
