@@ -1,15 +1,14 @@
 export const taxonomy = [
   {
-    "description": "גובה הקרקע מעל פני הים, במטרים",
-    "name": "location-elevation",
-    "title": "גובה מעל פני הים",
-    "type": "number",
-    "unit": "מ׳"
-  },
-  {
     "description": "שם היישוב בו מצוי העץ",
     "name": "location-city",
     "title": "שם יישוב",
+    "type": "string"
+  },
+  {
+    "description": "מזהה פנימי של העץ ברשות המקומית",
+    "name": "meta-internal-id",
+    "title": "מזהה פנימי",
     "type": "string"
   },
   {
@@ -41,6 +40,13 @@ export const taxonomy = [
     "name": "location-plot",
     "title": "חלקה",
     "type": "string"
+  },
+  {
+    "description": "גובה הקרקע מעל פני הים, במטרים",
+    "name": "location-elevation",
+    "title": "גובה מעל פני הים",
+    "type": "number",
+    "unit": "מ׳"
   },
   {
     "description": "תיאור המרחב המיידי של העץ\nערכים מותרים: רחוב, גינה/פארק ציבורי, חורשה, מוסד ציבורי, מגרש פרטי",

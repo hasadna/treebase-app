@@ -45,7 +45,7 @@
                         <span *ngIf='item.type === "number"' class='value tooltip' [matTooltip]='"כפי שהתקבל מ" + v.source'>{{toNumber(v.value, 1)}}</span>
                         <span *ngIf='item.type === "integer"' class='value tooltip' [matTooltip]='"כפי שהתקבל מ" + v.source'>{{toNumber(v.value, 0)}}</span>
                         <span *ngIf='item.type === "boolean"' class='value tooltip' [matTooltip]='"כפי שהתקבל מ" + v.source'>{{toBoolean(v.value)}}</span>
-                        <img *ngIf='item.type === "photo"' class='value' [matTooltip]='"כפי שהתקבל מ" + v.source' [src]='toImage(v.value)'>
+                        <img *ngIf='item.type === "photo"' class='value' [matTooltip]='"כפי שהתקבל מ" + v.source' [src]='v.value'>
                         <span class='unit' *ngIf='!!item.unit'>&nbsp;{{item.unit}}</span>
                     </div>
                 </div>

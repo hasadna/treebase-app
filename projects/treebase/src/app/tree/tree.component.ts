@@ -17,6 +17,7 @@ export class TreeComponent {
   sources: any[] = [];
   streetView: SafeUrl;
   extraItems: any[] = [];
+  processedData: any[] = [];
 
   constructor(private sanitizer: DomSanitizer) {
   }
@@ -27,6 +28,10 @@ export class TreeComponent {
       this.sources = [];
       return;
     }
+    if (state.data[0] === this.processedData) {
+      return;
+    }
+    this.processedData = state.data[0];
     this.sources = [];
     this.tree = {};
     this.treeExtra = {};
@@ -44,18 +49,25 @@ export class TreeComponent {
         if (!!row[key]) {
           this.treeExtra[key] = this.treeExtra[key] || [];
           let found = false;
-          for (const item of this.treeExtra[key]) {
-            if (item.value === row[key]) {
-              found = true;
-              item['source'] = item['source'] + ', ' + row['meta-source'];
-              break;
-            }
+          let values = [row[key]];
+          if (values[0]?.indexOf && values[0].indexOf('http') === 0) {
+            values = values[0].split(' ');
           }
-          if (!found) {
-            this.treeExtra[key].push({
-              source: row['meta-source'],
-              value: row[key]
-            });  
+          console.log('VALUES', key, values);
+          for (const value of values) {
+            for (const item of this.treeExtra[key]) {
+              if (item.value === value) {
+                found = true;
+                item['source'] = item['source'] + ', ' + row['meta-source'];
+                break;
+              }
+            }
+            if (!found) {
+              this.treeExtra[key].push({
+                source: row['meta-source'],
+                value
+              });  
+            }
           }
         }
       }
@@ -68,6 +80,12 @@ export class TreeComponent {
         const rec = Object.assign({values: this.treeExtra[item.name]}, item);
         if (rec.type === 'string' && rec.values[0].value.indexOf('http') === 0) {
           rec.type = 'photo';
+          rec.values = rec.values.map((v: any) => {
+            return {
+              source: v.source,
+              value: this.sanitizer.bypassSecurityTrustResourceUrl(v.value)
+            };
+          });
         }
         this.extraItems.push(rec);
       }

@@ -11,6 +11,7 @@ import { StatAreasComponent } from './stat-areas/stat-areas.component';
 const routes: Routes = [
   { path: 'trees', component: TreesComponent },
   { path: 'trees/:id', component: TreeComponent },
+  { path: 'linkto/:id', component: TreeComponent },
   { path: 'munis', component: MunisComponent },
   { path: 'munis/:id', component: MuniComponent },
   { path: 'stat-areas', component: StatAreasComponent },
