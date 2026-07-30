@@ -1,64 +1,105 @@
-@import url('../../common-info.less');
+.tree-header {
+    display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px;
+    h1 { margin: 0; }
+    .header-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+}
 
-.content {
-    .info {
-        display: flex;
-        flex-flow: row;
-        align-items: baseline;
-        justify-content: space-between;
-        span:first-child {
-            .font-regular;
-            font-size: 15px;
-            line-height: 24px;
-            color: @color-grey;
-        }
-        span:last-child {
-            .font-semibold;
-            font-size: 15px;
-            line-height: 24px;
-            color: @color-grey;
-        }
+.btn {
+    padding: 6px 14px; border-radius: 6px; border: none; cursor: pointer; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;
+    &.btn-confirm, &.btn-primary { background: #204E37; color: #fff; }
+    &.btn-toggle-overlay { background: #e2e8f0; color: #334155; &.active { background: #3b82f6; color: #fff; } }
+    &.btn-add-proposal { background: #ff871f; color: #fff; }
+    &.btn-secondary { background: #f1f5f9; color: #475569; }
+    &:disabled { background: #cbd5e1; cursor: not-allowed; }
+}
+
+.badge-confirmed { background: #dcfce7; color: #15803d; border: 1px solid #86efac; padding: 4px 10px; border-radius: 16px; font-size: 13px; font-weight: 600; }
+
+.info {
+    display: flex; align-items: center; justify-content: space-between;
+    span:first-child, span:last-child { font-size: 15px; color: #4b5563; }
+    span:last-child { font-weight: 600; }
+    .val-container { display: flex; align-items: center; gap: 6px; }
+}
+
+.btn-edit-field {
+    background: none; border: none; cursor: pointer; font-size: 12px; opacity: 0.6; padding: 2px 4px; border-radius: 4px;
+    &:hover { opacity: 1; background: #f1f5f9; }
+}
+
+.proposal-overlay-badge { background: #fef3c7; color: #92400e; border: 1px dashed #f59e0b; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 600; margin-right: 6px; }
+
+.proposals-section {
+    background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 16px;
+    h2 { margin-top: 0; font-size: 16px; color: #1e293b; }
+}
+
+.proposals-list { display: flex; flex-direction: column; gap: 8px; }
+
+.proposal-card {
+    background: #fff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 10px 12px;
+    &.rejected { opacity: 0.6; background: #fcfcfc; border-style: dashed; }
+}
+
+.prop-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.header-meta { display: flex; align-items: center; gap: 8px; }
+.prop-date { font-size: 11px; color: #64748b; }
+
+.prop-actions { display: flex; align-items: center; gap: 4px; }
+
+.btn-action {
+    width: 22px; height: 22px; border-radius: 4px; border: none; cursor: pointer; font-size: 12px; font-weight: bold; display: flex; align-items: center; justify-content: center; padding: 0; transition: all 0.15s ease;
+    &.btn-accept { background: #dcfce7; color: #15803d; border: 1px solid #86efac; &:hover { background: #bbf7d0; } }
+    &.btn-reject { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; &:hover { background: #fecaca; } }
+}
+
+.status-badge {
+    font-size: 11px; padding: 2px 6px; border-radius: 4px; font-weight: 600;
+    &.pending { background: #fef3c7; color: #92400e; }
+    &.accepted { background: #dcfce7; color: #15803d; }
+    &.rejected { background: #fee2e2; color: #991b1b; }
+}
+
+.prop-changes { display: flex; flex-direction: column; gap: 4px; }
+.change-row { display: flex; align-items: center; justify-content: space-between; font-size: 13px; }
+.change-field { font-weight: 600; color: #1e293b; }
+.change-vals {
+    display: flex; align-items: center; gap: 6px;
+    .from-val { color: #64748b; }
+    .arrow { color: #94a3b8; }
+    .to-val { font-weight: 600; color: #d97706; }
+}
+
+.extra-info .item {
+    display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px;
+    .title-row { display: flex; align-items: center; gap: 6px; }
+    .title { white-space: nowrap; }
+    .values {
+        font-weight: 600; font-size: 15px; color: #4b5563; display: flex; flex-direction: column; align-items: flex-end; gap: 2px;
+        img { width: 100%; object-fit: contain; }
+        .unit { font-size: 10px; font-weight: 400; }
+        .value-tuple { display: flex; align-items: baseline; justify-content: flex-end; width: 100%; }
     }
-    .extra-info {
-        .item {
-            display: flex;
-            flex-flow: row;
-            align-items: flex-start;;
-            justify-content: space-between;
-            gap: 16px;
-            .title {
-                flex: 0 0 auto;
-                white-space: nowrap;
-            }
-            .values {
-                flex: 1 1 100%;
-                .font-semibold;
-                font-size: 15px;
-                line-height: 24px;
-                color: @color-grey;
-                display: flex;
-                flex-flow: column;
-                align-items: flex-end;
-                gap: 2px;
+}
 
-                img {
-                    width: 100%;
-                    object-fit: contain;
-                }
-
-                .unit {
-                    font-size: 10px;
-                    .font-regular;
-                }
-
-                .value-tuple {
-                    display: flex;
-                    flex-flow: row;
-                    align-items: baseline;  
-                    justify-content: flex-end;  
-                    width: 100%;
-                }
-            }        
+.modal-backdrop {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.5); display: flex; align-items: center; justify-content: center; z-index: 1000;
+    .modal-dialog {
+        background: #fff; border-radius: 10px; width: 90%; max-width: 450px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); display: flex; flex-direction: column; direction: rtl;
+        .modal-header {
+            padding: 16px 20px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;
+            h3 { margin: 0; font-size: 18px; }
+            .btn-close { background: none; border: none; font-size: 18px; cursor: pointer; color: #64748b; }
         }
+        .modal-body {
+            padding: 20px; display: flex; flex-direction: column; gap: 16px;
+            .form-group {
+                display: flex; flex-direction: column; gap: 6px;
+                label { font-size: 14px; font-weight: 600; color: #334155; }
+                select, input[type="text"] { padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; width: 100%; box-sizing: border-box; }
+                .read-only-val { padding: 8px 12px; background: #f1f5f9; border-radius: 6px; font-size: 14px; color: #475569; }
+            }
+        }
+        .modal-footer { padding: 12px 20px; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end; gap: 10px; }
     }
 }

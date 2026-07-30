@@ -1,28 +1,119 @@
 <app-content mode='tree' [init]='!!tree' [back]='["/", "trees"]' (state)='state = $event'>
     <div class='content' *ngIf='tree'>
-        <h1>מזעץ: {{ tree['meta-tree-id'] }}</h1>
+        <div class='tree-header'>
+            <h1>מזעץ: {{ tree['meta-tree-id'] }}</h1>
+            <div class='header-actions'>
+                <!-- Confirm Tree Action -->
+                <button class='btn btn-confirm' *ngIf='!isConfirmed' (click)='confirmTree()'>
+                    <i class='icon'>✓</i> אשר עץ
+                </button>
+                <span class='badge badge-confirmed' *ngIf='isConfirmed'>
+                    ✓ עץ מאושר
+                </span>
+
+                <!-- Overlay Toggle Action -->
+                <button class='btn btn-toggle-overlay' [class.active]='showOverlay' (click)='toggleOverlay()'>
+                    {{ showOverlay ? 'הסתר שכבת שינויים' : 'הצג שכבת שינויים מוצעים' }}
+                </button>
+
+                <!-- Add Change Proposal Action -->
+                <button class='btn btn-add-proposal' (click)='openProposalModal()'>
+                    + הוסף הצעת שינוי
+                </button>
+            </div>
+        </div>
+
         <div class='main-infos section'>
             <div class='info'>
                 <span>מין</span>
-                <span>{{ tree['attributes-species-clean-he'] || 'לא ידוע' }}</span>
+                <span class='val-container'>
+                    {{ tree['attributes-species-clean-he'] || tree['attributes-species'] || 'לא ידוע' }}
+                    <button class='btn-edit-field' (click)='openProposalModal("attributes-species", "מין העץ", getFieldValue("attributes-species"))' matTooltip='הצע שינוי למין העץ'>✏️</button>
+                    <span class='proposal-overlay-badge' *ngIf='showOverlay && getLatestChangeForField("attributes-species")'>
+                        מוצע: {{ getLatestChangeForField("attributes-species")?.toValue }}
+                    </span>
+                </span>
             </div>
+
             <div class='info'>
                 <span>נ.צ</span>
-                <span class='ltr'>{{ tree['location-x'] | number:'1.0-5' }}, {{ tree['location-y'] | number:'1.0-5' }}</span>
+                <span class='val-container'>
+                    <span class='ltr'>{{ tree['location-x'] | number:'1.0-5' }}, {{ tree['location-y'] | number:'1.0-5' }}</span>
+                    <button class='btn-edit-field' (click)='openProposalModal("location-x", "קו אורך (location-x)", tree["location-x"])' matTooltip='הצע שינוי לקואורדינטה'>✏️</button>
+                    <span class='proposal-overlay-badge' *ngIf='showOverlay && getLatestChangeForField("location-x")'>
+                        מוצע X: {{ getLatestChangeForField("location-x")?.toValue }}
+                    </span>
+                    <span class='proposal-overlay-badge' *ngIf='showOverlay && getLatestChangeForField("location-y")'>
+                        מוצע Y: {{ getLatestChangeForField("location-y")?.toValue }}
+                    </span>
+                </span>
             </div>
-            <div class='info' *ngIf='tree.muni_name'>
+
+            <div class='info' *ngIf='tree.muni_name || getFieldValue("location-city")'>
                 <span>רשות מקומית</span>
-                <span>{{ tree['muni_name'] }}</span>
+                <span class='val-container'>
+                    {{ getFieldValue("location-city") || tree['muni_name'] }}
+                    <button class='btn-edit-field' (click)='openProposalModal("location-city", "רשות מקומית / שם יישוב", getFieldValue("location-city") || tree["muni_name"])' matTooltip='הצע שינוי לרשות המקומית'>✏️</button>
+                    <span class='proposal-overlay-badge' *ngIf='showOverlay && (getLatestChangeForField("location-city") || getLatestChangeForField("muni_name"))'>
+                        מוצע: {{ (getLatestChangeForField("location-city") || getLatestChangeForField("muni_name"))?.toValue }}
+                    </span>
+                </span>
             </div>
-            <div class='info' *ngIf='tree.road_name'>
+
+            <div class='info' *ngIf='tree.road_name || getFieldValue("location-street")'>
                 <span>רחוב</span>
-                <span>{{ tree['road_name'] }}</span>
+                <span class='val-container'>
+                    {{ getFieldValue("location-street") || tree['road_name'] }}
+                    <button class='btn-edit-field' (click)='openProposalModal("location-street", "רחוב", getFieldValue("location-street") || tree["road_name"])' matTooltip='הצע שינוי לרחוב'>✏️</button>
+                    <span class='proposal-overlay-badge' *ngIf='showOverlay && (getLatestChangeForField("location-street") || getLatestChangeForField("road_name"))'>
+                        מוצע: {{ (getLatestChangeForField("location-street") || getLatestChangeForField("road_name"))?.toValue }}
+                    </span>
+                </span>
             </div>
-            <div class='info' *ngIf='tree.cad_code'>
+
+            <div class='info' *ngIf='tree.cad_code || getFieldValue("location-block")'>
                 <span>גוש/חלקה</span>
-                <span class='ltr'>{{ tree['cad_code'] }}</span>
+                <span class='val-container'>
+                    <span class='ltr'>{{ tree['cad_code'] || getFieldValue("location-block") }}</span>
+                    <button class='btn-edit-field' (click)='openProposalModal("location-block", "גוש/חלקה", tree["cad_code"] || getFieldValue("location-block"))' matTooltip='הצע שינוי לגוש/חלקה'>✏️</button>
+                    <span class='proposal-overlay-badge' *ngIf='showOverlay && (getLatestChangeForField("location-block") || getLatestChangeForField("cad_code"))'>
+                        מוצע: {{ (getLatestChangeForField("location-block") || getLatestChangeForField("cad_code"))?.toValue }}
+                    </span>
+                </span>
             </div>
         </div>
+
+        <!-- Proposed Changes List Section -->
+        <div class='proposals-section section' *ngIf='showOverlay && proposals.length > 0'>
+            <h2>הצעות שינוי שנרשמו ({{ proposals.length }})</h2>
+            <div class='proposals-list'>
+                <div class='proposal-card' [class.accepted]='prop.status === "accepted"' [class.rejected]='prop.status === "rejected"' *ngFor='let prop of proposals'>
+                    <div class='prop-header'>
+                        <div class='header-meta'>
+                            <span class='prop-date'>{{ prop.createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
+                            <span class='status-badge' [class]='prop.status'>
+                                {{ prop.status === 'rejected' ? 'נדחתה' : (prop.status === 'accepted' ? 'אושרה' : 'ממתינה') }}
+                            </span>
+                        </div>
+                        <div class='prop-actions' *ngIf='prop.status === "pending"'>
+                            <button class='btn-action btn-accept' (click)='acceptProposal(prop.id)' matTooltip='אשר הצעה'>✓</button>
+                            <button class='btn-action btn-reject' (click)='rejectProposal(prop.id)' matTooltip='דחה הצעה'>✕</button>
+                        </div>
+                    </div>
+                    <div class='prop-changes'>
+                        <div class='change-row' *ngFor='let change of prop.changes'>
+                            <div class='change-field'>{{ getFieldTitle(change.field) }}</div>
+                            <div class='change-vals'>
+                                <span class='from-val'>{{ change.fromValue }}</span>
+                                <span class='arrow'>←</span>
+                                <span class='to-val'>{{ change.toValue }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class='sources section'>
             <h2>רשימת מקורות המידע</h2>
             <div class='info' *ngFor='let source of sources'>
@@ -30,15 +121,23 @@
                 <span>{{source.date}}</span>
             </div>
         </div>
+
         <div class='street-view section'>
             <h2>תצוגת רחוב (עדכניות לפי מפות Google)</h2>
             <iframe width="340" height="340" style="border:0" loading="lazy" allowfullscreen
                     [src]='streetView'></iframe>     
         </div>
+
         <div class='extra-info section' *ngIf='extraItems.length > 0'>
             <h2>מידע נוסף</h2>
             <div class='item' *ngFor='let item of extraItems'>
-                <span class='title tooltip' [matTooltip]='item.description'>{{item.title}}</span>
+                <div class='title-row'>
+                    <span class='title tooltip' [matTooltip]='item.description'>{{item.title}}</span>
+                    <button class='btn-edit-field' (click)='openProposalModal(item.name, item.title, getFieldValue(item.name))' matTooltip='הצע שינוי בשדה זה'>✏️</button>
+                    <span class='proposal-overlay-badge' *ngIf='showOverlay && getLatestChangeForField(item.name)'>
+                        מוצע: {{ getLatestChangeForField(item.name)?.toValue }}
+                    </span>
+                </div>
                 <div class='values'>
                     <div class='value-tuple' *ngFor='let v of item.values'>
                         <span *ngIf='item.type === "string"' class='value tooltip' [matTooltip]='"כפי שהתקבל מ" + v.source'>{{v.value}}</span>
@@ -49,6 +148,39 @@
                         <span class='unit' *ngIf='!!item.unit'>&nbsp;{{item.unit}}</span>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Proposal Creation Modal Overlay -->
+    <div class='modal-backdrop' *ngIf='showProposalModal'>
+        <div class='modal-dialog'>
+            <div class='modal-header'>
+                <h3>הגשת הצעת שינוי לעץ</h3>
+                <button class='btn-close' (click)='closeProposalModal()'>✕</button>
+            </div>
+            <div class='modal-body'>
+                <div class='form-group'>
+                    <label>שדה לשינוי:</label>
+                    <select [(ngModel)]='selectedFieldKey' (change)='onFieldSelectChange()'>
+                        <option value='' disabled>בחר שדה...</option>
+                        <option *ngFor='let field of taxonomyFields' [value]='field.name'>
+                            {{ field.title }} ({{ field.name }})
+                        </option>
+                    </select>
+                </div>
+                <div class='form-group' *ngIf='selectedFieldKey'>
+                    <label>ערך נוכחי:</label>
+                    <div class='read-only-val'>{{ currentFieldValue }}</div>
+                </div>
+                <div class='form-group' *ngIf='selectedFieldKey'>
+                    <label>ערך מוצע:</label>
+                    <input type='text' [(ngModel)]='proposedFieldValue' placeholder='הזן את הערך המוצע...' />
+                </div>
+            </div>
+            <div class='modal-footer'>
+                <button class='btn btn-secondary' (click)='closeProposalModal()'>ביטול</button>
+                <button class='btn btn-primary' [disabled]='!selectedFieldKey || !proposedFieldValue.trim()' (click)='submitProposal()'>שלח הצעת שינוי</button>
             </div>
         </div>
     </div>

@@ -26,6 +26,9 @@ import { SearchComponent } from './search/search.component';
 import { ShareComponent } from './share/share.component';
 import { ExportComponent } from './export/export.component';
 
+import { FormsModule } from '@angular/forms';
+import { ProposalsService } from './proposals.service';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -55,8 +58,9 @@ import { ExportComponent } from './export/export.component';
     MatTooltipModule,
     MatSnackBarModule,
     BrowserAnimationsModule,
+    FormsModule,
   ],
-  providers: [],
+  providers: [ProposalsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
