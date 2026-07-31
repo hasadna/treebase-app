@@ -1,6 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @import (css) url('https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@400;600;700&family=Secular+One:wght@400&family=Rubik:wght@500;600&display=swap');
-@import (inline) 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css';
+@import (inline) 'mapbox-gl/dist/mapbox-gl.css';
 @import (inline) '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 
 html, body {
@@ -34,5 +34,90 @@ html, body {
     &.lang-en {
         display: inherit;
     }
-}/* You can add global styles to this file, and also import other style files */
+}
 
+/* Auth Dropdown Menu Custom Theme matching App Color Scheme */
+.auth-dropdown-menu {
+    border-radius: 8px !important;
+    overflow: hidden;
+    min-width: 240px !important;
+    max-width: 280px !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
+    background-color: #ffffff !important;
+
+    .menu-user-header, .user-info-header {
+        padding: 12px 16px;
+        background-color: #204E37;
+        color: #ffffff;
+
+        .user-display-name, .user-name-title {
+            font-weight: 600;
+            font-size: 14px;
+            color: #ffffff;
+            font-family: 'Rubik', 'Noto Sans Hebrew', sans-serif;
+        }
+
+        .user-email, .user-email-subtitle {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.85);
+            margin-top: 2px;
+        }
+    }
+
+    .menu-login-header, .login-header-title {
+        padding: 12px 16px;
+        background-color: #204E37;
+        color: #ffffff;
+        font-family: 'Rubik', 'Noto Sans Hebrew', sans-serif;
+
+        .login-title-text {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .login-notice {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 4px;
+            font-weight: normal;
+            line-height: 1.35;
+            white-space: normal;
+        }
+
+        .login-error-notice {
+            font-size: 11px;
+            color: #ffcdd2;
+            margin-top: 4px;
+            font-weight: 600;
+            line-height: 1.35;
+            white-space: normal;
+        }
+    }
+
+    .mat-mdc-menu-item, .mat-menu-item {
+        color: #204E37 !important;
+        font-family: 'Rubik', 'Noto Sans Hebrew', sans-serif !important;
+        font-size: 14px !important;
+        font-weight: 500 !important;
+
+        &[disabled] {
+            opacity: 0.6 !important;
+            color: #838383 !important;
+            cursor: not-allowed !important;
+
+            .mat-icon, mat-icon {
+                color: #838383 !important;
+            }
+        }
+
+        .mat-icon, mat-icon {
+            color: #204E37 !important;
+            margin-left: 8px !important;
+            margin-right: 0 !important;
+        }
+
+        &:hover:not([disabled]), &:focus:not([disabled]) {
+            background-color: #D1EADA !important;
+        }
+    }
+}
