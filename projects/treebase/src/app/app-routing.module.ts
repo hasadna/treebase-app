@@ -16,6 +16,7 @@ const routes: Routes = [
   { path: 'munis/:id', component: MuniComponent },
   { path: 'stat-areas', component: StatAreasComponent },
   { path: 'stat-areas/:id', component: StatAreaComponent },
+  { path: 'proposals', loadChildren: () => import('./proposals/proposals.module').then(m => m.ProposalsModule) },
   { path: '', component: AboutComponent },
 ];
 

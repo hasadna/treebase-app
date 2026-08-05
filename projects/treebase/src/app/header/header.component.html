@@ -9,4 +9,42 @@
     <a href='https://www.digital-forest.org.il/' target='_blank'>אודות</a>
     <a href='https://data-city.my.canva.site/terms' target='_blank'>מדיניות שימוש</a>
 </div>
+
+<!-- Single Avatar / Profile Image Button triggering Dropdown Menu (only if EnableAuth is enabled) -->
+<div class="user-auth-avatar" *ngIf="isAuthEnabled">
+    <button type="button" mat-icon-button [matMenuTriggerFor]="authMenu" aria-label="תפריט אימות משתמש" class="avatar-menu-btn" [matTooltip]="currentUser ? (currentUser.displayName || currentUser.email || 'משתמש מחובר') : (configError || 'התחבר למערכת')">
+        <img *ngIf="currentUser && currentUser.photoURL && !imageError" [src]="currentUser.photoURL" (error)="onImageError()" referrerpolicy="no-referrer" alt="תמונת משתמש" class="profile-img" />
+        <mat-icon *ngIf="!currentUser || !currentUser.photoURL || imageError" class="avatar-icon">
+            {{ currentUser ? 'account_circle' : 'person_outline' }}
+        </mat-icon>
+    </button>
+
+    <mat-menu #authMenu="matMenu" xPosition="before" class="auth-dropdown-menu">
+        <!-- Logged In State -->
+        <ng-container *ngIf="currentUser; else loggedOutMenu">
+            <div class="user-info-header" (click)="$event.stopPropagation()">
+                <div class="user-name-title">{{ currentUser.displayName || 'משתמש מחובר' }}</div>
+                <div class="user-email-subtitle" *ngIf="currentUser.email">{{ currentUser.email }}</div>
+            </div>
+            <button type="button" mat-menu-item (click)="logout($event)">
+                <mat-icon>logout</mat-icon>
+                <span>התנתק</span>
+            </button>
+        </ng-container>
+
+        <!-- Logged Out State - Just Google -->
+        <ng-template #loggedOutMenu>
+            <div class="login-header-title" (click)="$event.stopPropagation()">
+                <div class="login-title-text">התחברות למערכת</div>
+                <div class="login-notice" *ngIf="isConfigValid">ההתחברות נדרשת רק לשם עריכת וטיוב נתונים, ולא לצפייה.</div>
+                <div class="login-error-notice" *ngIf="!isConfigValid">{{ configError }}</div>
+            </div>
+            <button type="button" mat-menu-item (click)="loginWithGoogle($event)" [disabled]="!isConfigValid || authLoading">
+                <mat-icon>login</mat-icon>
+                <span>{{ isConfigValid ? 'התחבר באמצעות Google' : (configError || 'auth configuration error') }}</span>
+            </button>
+        </ng-template>
+    </mat-menu>
+</div>
+
 <a href='https://www.hasadna.org.il' aria-label='אתר הסדנא לידע ציבורי - מעבר לאתר חיצוני' class='pkw-logo'></a>

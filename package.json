@@ -24,6 +24,7 @@
     "@ngneat/until-destroy": "^10.0.0-beta.0",
     "@observablehq/plot": "^0.6.9",
     "@types/mapbox__mapbox-gl-draw": "^1.4.0",
+    "firebase": "^12.17.0",
     "mapbox-gl": "^2.15.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

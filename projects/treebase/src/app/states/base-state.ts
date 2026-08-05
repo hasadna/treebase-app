@@ -85,7 +85,8 @@ export class State {
             this.focus = null;
         }
         this.focusQuery = this.focus?.treesQuery() || 'TRUE';
-        this.clearFilters = this.filters && Object.keys(this.filters).length > 0;
+        const filterKeys = Object.keys(this.filters || {}).filter(k => k !== 'enableauth' && k !== 'focus');
+        this.clearFilters = filterKeys.length > 0;
     }
     
     process(api: ApiService): Observable<any> {

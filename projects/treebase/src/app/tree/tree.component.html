@@ -1,28 +1,80 @@
 <app-content mode='tree' [init]='!!tree' [back]='["/", "trees"]' (state)='state = $event'>
     <div class='content' *ngIf='tree'>
-        <h1>מזעץ: {{ tree['meta-tree-id'] }}</h1>
+        <div class='tree-header'>
+            <div class='header-title-bar'>
+                <h1>מזעץ: {{ tree['meta-tree-id'] }}</h1>
+                <div class='last-updated-badge' *ngIf='isAuthenticated && latestUpdateDate'>
+                    📅 עודכן לאחרונה: <strong>{{ latestUpdateDate | date:'dd/MM/yyyy HH:mm' }}</strong>
+                </div>
+            </div>
+            <div class='header-actions'>
+                <!-- Touch / NOP Date Update Action -->
+                <button class='btn-icon-only btn-touch-date' *ngIf='isAuthenticated' (click)='touchTreeDate()'
+                    matTooltip='עדכן תאריך עץ' title='עדכן תאריך עץ'>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z" />
+                        <path d="m9 16 2 2 4-4" />
+                    </svg>
+                </button>
+
+                <!-- Full Edit Tree Action -->
+                <button class='btn-icon-only btn-add-proposal' *ngIf='isAuthenticated' (click)='openEditModal()' matTooltip='עריכת פרטי עץ' title='עריכת פרטי עץ'>
+                    ✏️
+                </button>
+
+                <!-- Open History Modal Action -->
+                <button class='btn-icon-only btn-history' *ngIf='isAuthenticated' (click)='openHistoryModal()' matTooltip='היסטוריית שינויים' title='היסטוריית שינויים'>
+                    📋
+                </button>
+
+                <!-- Confirm Tree Action (Only visible when tree is NOT confirmed; moved to end to avoid button shifts) -->
+                <button class='btn-icon-only btn-confirm' *ngIf='isAuthenticated && !isConfirmed' (click)='confirmTree()' matTooltip='אשר עץ' title='אשר עץ'>
+                    🌳
+                </button>
+            </div>
+        </div>
+
         <div class='main-infos section'>
             <div class='info'>
                 <span>מין</span>
-                <span>{{ tree['attributes-species-clean-he'] || 'לא ידוע' }}</span>
+                <span class='val-container'>
+                    {{ getFieldValue('attributes-species-clean-he') || 'לא ידוע' }}
+                    <button class='btn-edit-field' *ngIf='isAuthenticated' (click)='openEditModal("attributes-species-clean-he")'>✏️</button>
+                </span>
             </div>
             <div class='info'>
                 <span>נ.צ</span>
-                <span class='ltr'>{{ tree['location-x'] | number:'1.0-5' }}, {{ tree['location-y'] | number:'1.0-5' }}</span>
+                <span class='val-container'>
+                    <span class='ltr'>
+                        {{ getFieldValue('location-x') | number:'1.0-5' }}, {{ getFieldValue('location-y') | number:'1.0-5' }}
+                    </span>
+                    <button class='btn-edit-field' *ngIf='isAuthenticated' (click)='openEditModal("location-x")'>✏️</button>
+                </span>
             </div>
-            <div class='info' *ngIf='tree.muni_name'>
+            <div class='info' *ngIf='getFieldValue("muni_name")'>
                 <span>רשות מקומית</span>
-                <span>{{ tree['muni_name'] }}</span>
+                <span class='val-container'>
+                    {{ getFieldValue('muni_name') }}
+                    <button class='btn-edit-field' *ngIf='isAuthenticated' (click)='openEditModal("muni_name")'>✏️</button>
+                </span>
             </div>
-            <div class='info' *ngIf='tree.road_name'>
+            <div class='info' *ngIf='getFieldValue("road_name")'>
                 <span>רחוב</span>
-                <span>{{ tree['road_name'] }}</span>
+                <span class='val-container'>
+                    {{ getFieldValue('road_name') }}
+                    <button class='btn-edit-field' *ngIf='isAuthenticated' (click)='openEditModal("road_name")'>✏️</button>
+                </span>
             </div>
-            <div class='info' *ngIf='tree.cad_code'>
+            <div class='info' *ngIf='getFieldValue("cad_code")'>
                 <span>גוש/חלקה</span>
-                <span class='ltr'>{{ tree['cad_code'] }}</span>
+                <span class='val-container'>
+                    {{ getFieldValue('cad_code') }}
+                    <button class='btn-edit-field' *ngIf='isAuthenticated' (click)='openEditModal("cad_code")'>✏️</button>
+                </span>
             </div>
         </div>
+
         <div class='sources section'>
             <h2>רשימת מקורות המידע</h2>
             <div class='info' *ngFor='let source of sources'>
@@ -30,10 +82,34 @@
                 <span>{{source.date}}</span>
             </div>
         </div>
+
+        <!-- Image Gallery Side Panel Section -->
+        <div class='gallery section' *ngIf='galleryDateGroups && galleryDateGroups.length > 0'>
+            <h2>🖼️ גלריית תמונות עץ</h2>
+
+            <div class='gallery-date-group' *ngFor='let dateGroup of galleryDateGroups; trackBy: trackByDateGroup'>
+                <div class='gallery-date-header'>
+                    📅 <span>{{ dateGroup.displayDate }}</span>
+                </div>
+
+                <div class='gallery-attr-group' *ngFor='let attrGroup of dateGroup.attributeGroups; trackBy: trackByAttrGroup'>
+                    <div class='gallery-attr-subtitle'>
+                        🏷️ {{ attrGroup.fieldTitle }}
+                    </div>
+                    <div class='gallery-grid'>
+                        <div class='gallery-thumb-card' *ngFor='let img of attrGroup.images; trackBy: trackByImage' (click)='openGalleryLightbox(img)'>
+                            <img [src]='img.url' alt='תמונת עץ' loading='lazy' />
+                            <span class='thumb-source-tag' *ngIf='img.source'>{{ img.source }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class='street-view section'>
             <h2>תצוגת רחוב (עדכניות לפי מפות Google)</h2>
             <iframe width="340" height="340" style="border:0" loading="lazy" allowfullscreen
-                    [src]='streetView'></iframe>     
+                    [src]='streetView'></iframe>
         </div>
         <div class='extra-info section' *ngIf='extraItems.length > 0'>
             <h2>מידע נוסף</h2>
@@ -49,6 +125,208 @@
                         <span class='unit' *ngIf='!!item.unit'>&nbsp;{{item.unit}}</span>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gallery Lightbox Modal -->
+    <div class='modal-backdrop' *ngIf='selectedGalleryImage'>
+        <div class='modal-dialog gallery-lightbox-dialog'>
+            <div class='modal-header'>
+                <h3>{{ selectedGalleryImage.fieldTitle }}</h3>
+                <button class='btn-close' (click)='closeGalleryLightbox()'>✕</button>
+            </div>
+            <div class='modal-body lightbox-body'>
+                <img [src]='selectedGalleryImage.url' class='lightbox-full-img' />
+                <div class='lightbox-meta'>
+                    <span>📅 תאריך: <strong>{{ selectedGalleryImage.displayDate }}</strong></span>
+                    <span *ngIf='selectedGalleryImage.source'>👤 מקור/מגיש: <strong>{{ selectedGalleryImage.source }}</strong></span>
+                </div>
+            </div>
+            <div class='modal-footer'>
+                <button class='btn btn-secondary' (click)='closeGalleryLightbox()'>סגור</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Full Tree Edit Form Modal Overlay -->
+    <div class='modal-backdrop' *ngIf='showEditModal && isAuthenticated'>
+        <div class='modal-dialog modal-large'>
+            <div class='modal-header'>
+                <h3>✏️ עריכת פרטי עץ</h3>
+                <button class='btn-close' (click)='closeEditModal()'>✕</button>
+            </div>
+            <div class='modal-body'>
+                <div class='form-group editor-badge-row'>
+                    <label>עורך:</label>
+                    <div class='read-only-val'>👤 {{ proposerFullName }}</div>
+                </div>
+
+                <!-- Location Section -->
+                <div class='edit-form-section'>
+                    <h4 class='section-title'>📍 מיקום וקואורדינטות</h4>
+                    <div class='edit-form-grid-2'>
+                        <div class='form-group'>
+                            <label>קו אורך (location-x):</label>
+                            <input type='text' id='edit-field-location-x' [(ngModel)]='editFormValues["location-x"]' placeholder='הזן X...' />
+                        </div>
+                        <div class='form-group'>
+                            <label>קו רוחב (location-y):</label>
+                            <input type='text' id='edit-field-location-y' [(ngModel)]='editFormValues["location-y"]' placeholder='הזן Y...' />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Taxonomy Attributes Form Section -->
+                <div class='edit-form-section'>
+                    <h4 class='section-title'>📋 מאפייני עץ</h4>
+                    <div class='edit-form-fields-list'>
+                        <div class='edit-field-card' *ngFor='let field of taxonomyFields' [id]='"edit-field-" + field.name'>
+                            <div class='field-card-header'>
+                                <label>
+                                    <strong>{{ field.title }}</strong>
+                                    <span class='field-name-code'>({{ field.name }})</span>
+                                </label>
+                                <span class='field-unit-badge' *ngIf='field.unit'>{{ field.unit }}</span>
+                            </div>
+
+                            <!-- Photo Field Input -->
+                            <ng-container *ngIf='checkIsPhotoField(field.name)'>
+                                <div class='photo-field-editor'>
+                                    <div class='photo-preview-box' *ngIf='editFormValues[field.name]'>
+                                        <img [src]='editFormValues[field.name]' class='photo-preview-img' *ngIf='isImageUrl(editFormValues[field.name])' />
+                                        <span *ngIf='!isImageUrl(editFormValues[field.name])'>{{ editFormValues[field.name] }}</span>
+                                        <button type="button" class="btn-remove-photo" (click)="editFormValues[field.name] = ''">✕ הסר תמונה</button>
+                                    </div>
+
+                                    <div class='photo-upload-actions'>
+                                        <input type="file" accept="image/*" #fileInput (change)="onPhotoSelectedForField($event, field.name)" style="display: none;" />
+                                        <input type="file" accept="image/*" capture="environment" #cameraInput (change)="onPhotoSelectedForField($event, field.name)" style="display: none;" />
+
+                                        <button type="button" class="btn btn-photo-opt" (click)="openCameraForField(field.name)">
+                                            📷 צלם תמונה
+                                        </button>
+                                        <button type="button" class="btn btn-photo-opt" (click)="fileInput.click()">
+                                            🖼️ בחר מגלריה
+                                        </button>
+                                    </div>
+                                </div>
+                            </ng-container>
+
+                            <!-- Non-Photo Field Inputs -->
+                            <ng-container *ngIf='!checkIsPhotoField(field.name)'>
+                                <!-- Boolean Select Input -->
+                                <select [(ngModel)]='editFormValues[field.name]' *ngIf='field.type === "boolean"'>
+                                    <option value=''>-- בחר --</option>
+                                    <option [ngValue]='true'>כן</option>
+                                    <option [ngValue]='false'>לא</option>
+                                </select>
+
+                                <!-- Closed-Set Select Dropdown (Static or Dynamic Options) -->
+                                <select [(ngModel)]='editFormValues[field.name]' *ngIf='field.type !== "boolean" && getFieldOptions(field.name) as opts'>
+                                    <option value=''>-- בחר {{ field.title }} --</option>
+                                    <option *ngFor='let opt of opts' [value]='opt'>{{ opt }}</option>
+                                </select>
+
+                                <!-- Free Text / Numeric Input -->
+                                <input type='text' [(ngModel)]='editFormValues[field.name]' [placeholder]='"הזן " + field.title + "..."' *ngIf='field.type !== "boolean" && !getFieldOptions(field.name)' />
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='modal-footer'>
+                <button class='btn btn-secondary' (click)='closeEditModal()'>ביטול</button>
+                <button class='btn btn-primary' [disabled]='!hasFormChanges()' (click)='submitEditForm()'>שמור שינויים</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live WebRTC Camera Viewfinder Modal -->
+    <div class='modal-backdrop' *ngIf='showCameraModal && isAuthenticated'>
+        <div class='modal-dialog camera-dialog'>
+            <div class='modal-header'>
+                <h3>📷 צילום תמונה ממצלמה</h3>
+                <button class='btn-close' (click)='closeCamera()'>✕</button>
+            </div>
+            <div class='modal-body camera-body'>
+                <div class='video-container'>
+                    <video #videoElement autoplay playsinline muted></video>
+                </div>
+            </div>
+            <div class='modal-footer'>
+                <button class='btn btn-secondary' (click)='closeCamera()'>ביטול</button>
+                <button class='btn btn-capture' (click)='capturePhotoForActiveField()'>📸 לכוד תמונה</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- History Modal Overlay -->
+    <div class='modal-backdrop' *ngIf='showHistoryModal'>
+        <div class='modal-dialog modal-large'>
+            <div class='modal-header'>
+                <h3>
+                    📋 היסטוריית שינויים לעץ
+                    <span class='count-summary'>({{ filteredProposals.length }} שינויים)</span>
+                </h3>
+                <button class='btn-close' (click)='closeHistoryModal()'>✕</button>
+            </div>
+
+            <!-- History Modal Filters -->
+            <div class='history-filters'>
+                <div class='filter-group'>
+                    <label>סינון לפי שדה:</label>
+                    <select [(ngModel)]='filterField'>
+                        <option value=''>כל השדות</option>
+                        <option *ngFor='let opt of proposalFieldOptions' [value]='opt.key'>
+                            {{ opt.title }} ({{ opt.key }})
+                        </option>
+                    </select>
+                </div>
+
+                <div class='filter-group'>
+                    <label>סינון לפי מגיש:</label>
+                    <input type='text' [(ngModel)]='filterProposer' placeholder='חפש שם מגיש...' />
+                </div>
+
+                <button class='btn btn-secondary btn-reset-filters' *ngIf='filterField || filterProposer' (click)='resetHistoryFilters()'>
+                    איפוס סינון
+                </button>
+            </div>
+
+            <div class='modal-body'>
+                <div class='proposals-list' *ngIf='filteredProposals.length > 0'>
+                    <div class='proposal-card' *ngFor='let prop of filteredProposals'>
+                        <div class='prop-header'>
+                            <div class='header-meta'>
+                                <span class='prop-date'>📅 {{ prop.createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
+                                <span class='meta-person' *ngIf='prop.proposer'>👤 מגיש: <strong>{{ prop.proposer }}</strong></span>
+                            </div>
+                        </div>
+                        <div class='prop-changes'>
+                            <div class='change-row' *ngFor='let change of prop.changes'>
+                                <span class='change-field'>{{ getFieldTitle(change.field) }}</span>
+                                <div class='change-vals'>
+                                    <span class='from-val' *ngIf='!checkIsPhotoField(change.field) && !isImageUrl(change.fromValue)'>{{ change.fromValue || '(ריק)' }}</span>
+                                    <span class='arrow'>←</span>
+                                    <span class='to-val' *ngIf='!checkIsPhotoField(change.field) && !isImageUrl(change.toValue)'>{{ change.toValue }}</span>
+
+                                    <!-- Photo change preview in history -->
+                                    <img *ngIf='isImageUrl(change.toValue)' [src]='change.toValue' class='thumb-img' alt='תמונה מוצעת' />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class='empty-proposals' *ngIf='filteredProposals.length === 0'>
+                    <p *ngIf='proposals.length === 0'>עדיין אין היסטוריית שינויים לעץ זה.</p>
+                    <p *ngIf='proposals.length > 0 && filteredProposals.length === 0'>לא נמצאו שינויים התואמים את המסננים שנבחרו.</p>
+                </div>
+            </div>
+
+            <div class='modal-footer'>
+                <button class='btn btn-secondary' (click)='closeHistoryModal()'>סגור</button>
             </div>
         </div>
     </div>
